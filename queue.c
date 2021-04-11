@@ -7,14 +7,15 @@
 #define QSIZE 8
 #endif
 
+//unbounded queue for file and directory queue
 typedef struct {
-	char *data[QSIZE];
+	char *data;
 	unsigned count;
 	unsigned head;
 	int open;
 	pthread_mutex_t lock;
 	pthread_cond_t read_ready;
-	pthread_cond_t write_ready;
+	//pthread_cond_t write_ready;
 } queue_t;
 
 int init(queue_t *Q)
@@ -24,7 +25,7 @@ int init(queue_t *Q)
 	Q->open = 1;
 	pthread_mutex_init(&Q->lock, NULL);
 	pthread_cond_init(&Q->read_ready, NULL);
-	pthread_cond_init(&Q->write_ready, NULL);
+	//pthread_cond_init(&Q->write_ready, NULL);
 
 	return 0;
 }
@@ -33,7 +34,7 @@ int destroy(queue_t *Q)
 {
 	pthread_mutex_destroy(&Q->lock);
 	pthread_cond_destroy(&Q->read_ready);
-	pthread_cond_destroy(&Q->write_ready);
+	//pthread_cond_destroy(&Q->write_ready);
 
 	return 0;
 }
@@ -45,9 +46,9 @@ int enqueue(queue_t *Q, char *item)
 {
 	pthread_mutex_lock(&Q->lock);
 
-	while (Q->count == QSIZE && Q->open) {
+	/*while (Q->count == QSIZE && Q->open) {
 		pthread_cond_wait(&Q->write_ready, &Q->lock);
-	}
+	}*/
 	if (!Q->open) {
 		pthread_mutex_unlock(&Q->lock);
 		return -1;
@@ -84,7 +85,7 @@ int dequeue(queue_t *Q, char *item)
 	++Q->head;
 	if (Q->head == QSIZE) Q->head = 0;
 
-	pthread_cond_signal(&Q->write_ready);
+	//pthread_cond_signal(&Q->write_ready);
 
 	pthread_mutex_unlock(&Q->lock);
 
@@ -96,7 +97,7 @@ int qclose(queue_t *Q)
 	pthread_mutex_lock(&Q->lock);
 	Q->open = 0;
 	pthread_cond_broadcast(&Q->read_ready);
-	pthread_cond_broadcast(&Q->write_ready);
+	//pthread_cond_broadcast(&Q->write_ready);
 	pthread_mutex_unlock(&Q->lock);
 
 	return 0;
