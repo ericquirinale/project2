@@ -7,6 +7,7 @@
 #include <dirent.h>
 #include <pthread.h>
 #include "queue.c"
+#include "linkedlist.c"
 
 int main(int argc, char const *argv[]) {
   collectionPhase();
@@ -127,20 +128,6 @@ void fileQueue(){
       //add to wfdrep
     }
 }
-
-@@ -1,6 +1,7 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
-@ -54,3 +55,29 @@ void collectionPhase(){
-  }
-
-}
-
 
 //need to create WFD Data Structure, WFD Repo
 LL WFD(FILE* f){// returns a Linked List for the WFD
