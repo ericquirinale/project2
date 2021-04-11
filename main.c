@@ -127,3 +127,42 @@ void fileQueue(){
       //add to wfdrep
     }
 }
+
+@@ -1,6 +1,7 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+@ -54,3 +55,29 @@ void collectionPhase(){
+  }
+
+}
+
+
+//need to create WFD Data Structure, WFD Repo
+LL WFD(FILE* f){// returns a Linked List for the WFD
+
+  char *word;
+  char *official;
+
+  while(fscanf(f, "%s", word) == 1){
+
+    size_t length = strlen(word);
+    size_t i = 0;
+    char *letter;
+
+    for(; i < length; i++){
+
+      letter = word[i];
+      letter = tolower(letter);
+
+      if(!ispunct(letter)){
+
+        strcat(offical, letter);
+      }
+    }
+  }
+}
