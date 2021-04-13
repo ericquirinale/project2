@@ -1,0 +1,13 @@
+filenames vs paths
+------------------
+
+Briefly: a file name is its entry in the directory listing (d_name)
+    -> file names are only unique within a directory
+    -> a file name by itself is useless unless we know what directory it is in
+
+Most programs and libraries that work with file names actually work with paths
+-> a path says how to find a file from a particular starting point
+
+    Absolute paths begin with / (the root of the directory tree)
+        /foo/bar/baz/quux
+        

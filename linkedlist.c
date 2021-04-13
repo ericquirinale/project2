@@ -4,19 +4,13 @@
 #include <stdbool.h>
 #include <string.h>
 
-typdef struct{
-
+typedef struct linkedlist_t{
     char* word;
     int occurences;
     double frequency;
-    linkedlist_t *next;
+    struct linkedlist_t *next;
 
 } linkedlist_t;
 
 
-linkedlist_t insertAlphabetically(linkedlist_t head, )
-
-
-
-
-
+//linkedlist_t insertAlphabetically(linkedlist_t head, )

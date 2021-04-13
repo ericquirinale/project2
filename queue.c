@@ -3,10 +3,6 @@
 #include <unistd.h>
 #include <pthread.h>
 
-#ifndef QSIZE
-#define QSIZE 8
-#endif
-
 //unbounded queue for file and directory queue
 typedef struct {
 	char *data;
@@ -55,9 +51,9 @@ int enqueue(queue_t *Q, char *item)
 	}
 
 	unsigned i = Q->head + Q->count;
-	if (i >= QSIZE) i -= QSIZE;
+	//if (i >= QSIZE) i -= QSIZE;
 
-	Q->data[i] = item;
+	Q->data = item;
 	++Q->count;
 
 	pthread_cond_signal(&Q->read_ready);
@@ -83,7 +79,7 @@ int dequeue(queue_t *Q, char *item)
 	*item = Q->data[Q->head];
 	--Q->count;
 	++Q->head;
-	if (Q->head == QSIZE) Q->head = 0;
+	//if (Q->head == QSIZE) Q->head = 0;
 
 	//pthread_cond_signal(&Q->write_ready);
 
