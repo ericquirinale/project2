@@ -122,7 +122,7 @@ char *dequeue(queue_t *Q)
   	return item;
   }
   else{
-    thread_mutex_unlock(&Q->lock);
+    pthread_mutex_unlock(&Q->lock);
     printf("%s\n", "empty q");
     return "hi";
   }
