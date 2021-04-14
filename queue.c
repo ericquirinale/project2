@@ -93,11 +93,11 @@ char *dequeue(queue_t *Q)
 
   if(isempty(Q)){
     Q->activeThreads--;
-  if(Q->activeThreads == 0){
+    if(Q->activeThreads == 0){
       pthread_mutex_unlock(&Q->lock);
   		return NULL;
     }
-    while (Q->count == 0 && Q->open) {
+    while (isempty(Q) && Q->open) {
   		pthread_cond_wait(&Q->read_ready, &Q->lock);
   	}
     if (Q->count == 0) {
