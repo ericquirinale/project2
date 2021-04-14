@@ -9,10 +9,12 @@ typedef struct node{
     struct node *next;
 } node;
 
+extern int directoryThreads;
 //unbounded queue for file and directory queue
 typedef struct {
-	node *head;
+	node *head;;
 	node *tail;
+  int activeThreads;
 	int open;
 	int count;
 	pthread_mutex_t lock;
@@ -28,6 +30,7 @@ int init(queue_t *Q)
 	Q->head = NULL;
 	Q->tail = NULL;
 	Q->open = 1;
+  Q->activeThreads = directoryThreads;
 	pthread_mutex_init(&Q->lock, NULL);
 	pthread_cond_init(&Q->read_ready, NULL);
 	//pthread_cond_init(&Q->write_ready, NULL);
@@ -86,20 +89,26 @@ int enqueue(queue_t *Q, char *item){
 char *dequeue(queue_t *Q)
 {
 
-	pthread_mutex_lock(&Q->lock);
+	pthread_mutex_lock(&Q->lock); //lock queue
 
-	while (Q->count == 0 && Q->open) {
-		pthread_cond_wait(&Q->read_ready, &Q->lock);
-	}
+  if(isempty(Q)){
+    Q->activeThreads--;
+  if(Q->activeThreads == 0){
+      pthread_mutex_unlock(&Q->lock);
+  		return NULL;
+    }
+    while (Q->count == 0 && Q->open) {
+  		pthread_cond_wait(&Q->read_ready, &Q->lock);
+  	}
+    if (Q->count == 0) {
+  		pthread_mutex_unlock(&Q->lock);
+  		return NULL;
+  	}
+    Q->activeThreads++;
+  }
 
-	if (Q->count == 0) {
-		pthread_mutex_unlock(&Q->lock);
-		return NULL;
-	}
+  char *item = Q->head->data; //segfault here
 
-	node *tmp;
-  char *item = Q->head->data;
-  //tmp = Q->head;
   if(Q->count>1){
     Q->head = Q->head->next;
   }
@@ -107,14 +116,6 @@ char *dequeue(queue_t *Q)
     Q->head = NULL;
   }
   Q->count--;
-  //free(tmp);
-
-	/**item = *Q->data[Q->head]; //causing segfault
-	--Q->count;
-	++Q->head;
-	if (Q->head == QSIZE) Q->head = 0;
-
-	//pthread_cond_signal(&Q->write_ready);*/
 
 	pthread_mutex_unlock(&Q->lock);
 

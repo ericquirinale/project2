@@ -152,7 +152,6 @@ void *directoryQueue(){
         }
       }
       strcpy(filePath, dirName);
-      printf("%s\n", "jo");
     }
   }while(!isempty(&dirQ));
   return 0;
