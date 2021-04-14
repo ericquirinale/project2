@@ -78,8 +78,6 @@ void collectionPhase(){
     i++;
   }
 
-
-
   init(&dirQ);
   init(&fileQ);
 
@@ -98,21 +96,16 @@ void collectionPhase(){
     pthread_create(&fThreads[i], NULL, fileQueue, NULL);
   }
 
-
-
   //enque arguments to proper queue
   struct stat arg;
 
   for (size_t k = 1; k < argcG; k++) { //loop through arguments
     if (stat(argvG[k], &arg)==0){
-      printf("%s\n", argvG[k]);
       if(S_ISREG(arg.st_mode)) { //if is file
-        printf("%d\n", 12);
         enqueue(&fileQ, argvG[k]);
       }
       else if(S_ISDIR(arg.st_mode)) { //if is directory
         if(argvG[k][0] != '.'){
-          printf("%d\n", 122);
           enqueue(&dirQ, argvG[k]);
         }
       }
@@ -136,37 +129,42 @@ void *directoryQueue(){
   DIR *dir;
   struct dirent *dent;
   struct stat arg;
-  char *dirName = NULL;
-  printf("%s\n", "here");
-  while(dequeue(&dirQ, dirName)==0){ //while directorys to dequeue
-    printf("%s\n", "here2");
+  do{ //while directorys to dequeue
+    char *dirName = dequeue(&dirQ);
+    char filePath[strlen(dirName)+1];
+    strcpy(filePath, dirName);
     dir = opendir(dirName);
     while((dent = readdir(dir)) != NULL){ //loop through directory
-      if (stat(dent->d_name, &arg)==0){
+      strcat(filePath, dent->d_name);
+      printf("%s\n", filePath);
+      if (stat(filePath, &arg)==0){
         if(S_ISREG(arg.st_mode)) { //if is file
           if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
+            printf("%s\n",dent->d_name);
             enqueue(&fileQ, dent->d_name); //add to file queue
           }
         }
         else if(S_ISDIR(arg.st_mode)) { //if is directory
           if(dent->d_name[0] != '.'){
-            enqueue(&dirQ, dent->d_name); //add to directory queue
+            enqueue(&dirQ, filePath); //add to directory queue
+            printf("%s\n",filePath);
           }
         }
       }
+      strcpy(filePath, dirName);
+      printf("%s\n", "jo");
     }
-  }
-  printf("%s\n", "here3");
+  }while(!isempty(&dirQ));
   return 0;
 }
 
 void *fileQueue(){
     char *fileName = NULL;
-    while(dequeue(&fileQ, fileName)==0){ //while files to dequeue
+    /*while(dequeue(&fileQ, fileName)==0){ //while files to dequeue
       FILE *fp = fopen("fileName", "r");
       //linkedlist_t wfrequency = WFD(fp);
       //add to wfdrep
-    }
+    }*/
     return 0;
 }
 

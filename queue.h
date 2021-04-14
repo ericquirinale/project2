@@ -14,7 +14,8 @@ typedef struct {
 int init(queue_t *Q);
 int destroy(queue_t *Q);
 int enqueue(queue_t *Q, char *item);
-int dequeue(queue_t *Q, char *item);
+char *dequeue(queue_t *Q);
 int qclose(queue_t *Q);
+int isempty(queue_t *q);
 
 #endif
