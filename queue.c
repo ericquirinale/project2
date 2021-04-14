@@ -99,10 +99,15 @@ char *dequeue(queue_t *Q)
 
 	node *tmp;
   char *item = Q->head->data;
-  tmp = Q->head;
-  Q->head = Q->head->next;
+  //tmp = Q->head;
+  if(Q->count>1){
+    Q->head = Q->head->next;
+  }
+  else{
+    Q->head = NULL;
+  }
   Q->count--;
-  free(tmp);
+  //free(tmp);
 
 	/**item = *Q->data[Q->head]; //causing segfault
 	--Q->count;
