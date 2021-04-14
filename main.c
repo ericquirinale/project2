@@ -141,7 +141,7 @@ void *directoryQueue(){
       if (stat(filePath, &arg)==0){
         if(S_ISREG(arg.st_mode)) { //if is file
           if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
-            enqueue(&fileQ, dent->d_name); //add to file queue
+            //enqueue(&fileQ, dent->d_name); //add to file queue
             printf("%s\n%s\n", "Enqueued file: ", dent->d_name);
           }
         }
