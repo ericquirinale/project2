@@ -88,7 +88,6 @@ int enqueue(queue_t *Q, char *item){
 
 char *dequeue(queue_t *Q)
 {
-
 	pthread_mutex_lock(&Q->lock); //lock queue
 
   if(isempty(Q)){
@@ -100,26 +99,34 @@ char *dequeue(queue_t *Q)
     while (isempty(Q) && Q->open) {
   		pthread_cond_wait(&Q->read_ready, &Q->lock);
   	}
-    if (Q->count == 0) {
+    if (isempty(Q)){
   		pthread_mutex_unlock(&Q->lock);
   		return NULL;
   	}
     Q->activeThreads++;
   }
 
-  char *item = Q->head->data; //segfault here
+  if(!isempty(Q)){
+    char *item = Q->head->data; //segfault here
 
-  if(Q->count>1){
-    Q->head = Q->head->next;
+    if(Q->count>1){
+      Q->head = Q->head->next;
+    }
+    else{
+      Q->head = NULL;
+    }
+    Q->count--;
+
+  	pthread_mutex_unlock(&Q->lock);
+
+  	return item;
   }
   else{
-    Q->head = NULL;
+    printf("%s\n", "empty q");
+    return EXIT_FAILURE;
   }
-  Q->count--;
 
-	pthread_mutex_unlock(&Q->lock);
 
-	return item;
 }
 
 int isempty(queue_t *q)
