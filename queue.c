@@ -23,6 +23,7 @@ typedef struct {
 } queue_t;
 
 int isempty(queue_t *q);
+void display(node *head);
 
 int init(queue_t *Q)
 {
@@ -82,6 +83,8 @@ int enqueue(queue_t *Q, char *item){
 
 	pthread_mutex_unlock(&Q->lock);
 
+  display(Q->head);
+
 	return 0;
 }
 
@@ -96,7 +99,7 @@ char *dequeue(queue_t *Q)
       pthread_mutex_unlock(&Q->lock);
   		return NULL;
     }
-    while (isempty(Q) && Q->open) {
+    while (isempty(Q) && Q->activeThreads>0) {
   		pthread_cond_wait(&Q->read_ready, &Q->lock);
   	}
     if (isempty(Q)){
@@ -106,33 +109,40 @@ char *dequeue(queue_t *Q)
     Q->activeThreads++;
   }
 
-  if(!isempty(Q)){
-    char *item = Q->head->data; //segfault here
+  printf("%s", "Display: ");
+  display(Q->head);
+  printf("\n");
+  char *item = Q->head->data; //segfault here
 
-    if(Q->count>1){
-      Q->head = Q->head->next;
-    }
-    else{
-      Q->head = NULL;
-    }
-    Q->count--;
-
-  	pthread_mutex_unlock(&Q->lock);
-
-  	return item;
+  if(Q->count>1){
+    Q->head = Q->head->next;
   }
   else{
-    pthread_mutex_unlock(&Q->lock);
-    printf("%s\n", "empty q");
-    return "hi";
+    Q->head = NULL;
   }
+  Q->count--;
 
+	pthread_mutex_unlock(&Q->lock);
 
+	return item;
 }
 
 int isempty(queue_t *q)
 {
     return (q->tail == NULL);
+}
+
+void display(node *head)
+{
+    if(head == NULL)
+    {
+        printf("NULL\n");
+    }
+    else
+    {
+        printf("%s\n", head->data);
+        display(head->next);
+    }
 }
 
 int qclose(queue_t *Q)

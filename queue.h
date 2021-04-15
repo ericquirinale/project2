@@ -1,6 +1,11 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
+typedef struct node{
+    char *data;
+    struct node *next;
+} node;
+
 typedef struct {
 	char *data;
 	unsigned count;
@@ -17,5 +22,6 @@ int enqueue(queue_t *Q, char *item);
 char *dequeue(queue_t *Q);
 int qclose(queue_t *Q);
 int isempty(queue_t *q);
+void display(node *head);
 
 #endif

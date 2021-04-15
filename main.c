@@ -129,7 +129,7 @@ void *directoryQueue(){
   DIR *dir;
   struct dirent *dent;
   struct stat arg;
-  while(!isempty(&dirQ)){ //while directorys to dequeue
+  do{ //while directorys to dequeue
     char *dirName = dequeue(&dirQ);
     printf("%s\n%s\n","Dequeued: ", dirName);
     char filePath[strlen(dirName)+1];
@@ -137,7 +137,7 @@ void *directoryQueue(){
     dir = opendir(dirName);
     while((dent = readdir(dir)) != NULL){ //loop through directory
       strcat(filePath, dent->d_name);
-      printf("%s\n", filePath);
+      //printf("%s\n", filePath);
       if (stat(filePath, &arg)==0){
         if(S_ISREG(arg.st_mode)) { //if is file
           if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
@@ -154,7 +154,7 @@ void *directoryQueue(){
       }
       strcpy(filePath, dirName);
     }
-  }
+  }while(!isempty(&dirQ));
   return 0;
 }
 
