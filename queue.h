@@ -7,10 +7,11 @@ typedef struct node{
 } node;
 
 typedef struct {
-	char *data;
-	unsigned count;
-	unsigned head;
+	node *head;;
+	node *tail;
+  int activeThreads;
 	int open;
+	int count;
 	pthread_mutex_t lock;
 	pthread_cond_t read_ready;
 	//pthread_cond_t write_ready;

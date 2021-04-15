@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
@@ -69,11 +70,12 @@ int enqueue(queue_t *Q, char *item){
 	tmp = malloc(sizeof(node));
 	tmp->data = item;
 	tmp->next = NULL;
-	if(!isempty(Q)){
+	if(Q->count>0){
 		Q->tail->next = tmp;
 		Q->tail = tmp;
 	}
 	else{
+    //printf("%s%d\n", "wuz empty, ", Q->count);
 		Q->head = Q->tail = tmp;
 	}
 
@@ -83,8 +85,7 @@ int enqueue(queue_t *Q, char *item){
 
 	pthread_mutex_unlock(&Q->lock);
 
-  printf("%s", "Enqueued: ");
-  display(Q->head);
+  printf("%s%s\n", "Enqueued: ", item);
 
 	return 0;
 }
@@ -110,9 +111,10 @@ char *dequeue(queue_t *Q)
     Q->activeThreads++;
   }
 
-  printf("%s", "Dequeued: ");
-  display(Q->head);
-  char *item = Q->head->data; //segfault here
+  //printf("%s", "Dequeued: ");
+  //display(Q->head);
+  char *item = (char *) malloc(strlen(Q->head->data) + 1);
+  item = Q->head->data;
 
   if(Q->count>1){
     Q->head = Q->head->next;
@@ -129,7 +131,7 @@ char *dequeue(queue_t *Q)
 
 int isempty(queue_t *q)
 {
-    printf("%s%d\n", "empty count: ", q->count);
+    //printf("%s%d\n", "empty count: ", q->count);
     return (q->tail == NULL);
 }
 
