@@ -129,6 +129,7 @@ char *dequeue(queue_t *Q)
 
 int isempty(queue_t *q)
 {
+    printf("%s%d\n", "empty count: ", q->count);
     return (q->tail == NULL);
 }
 
