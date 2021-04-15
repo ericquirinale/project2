@@ -159,7 +159,6 @@ void *directoryQueue(){
       strcpy(filePath, dirName);
     }
     free(filePath);
-    free(dirName);
   }
 
   return 0;
