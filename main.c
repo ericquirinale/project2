@@ -85,17 +85,6 @@ void collectionPhase(){
   pthread_t dirThreads[directoryThreads];
   pthread_t fThreads[fileThreads];
 
-  //init barrier
-  //pthread_barrier_init(&directoryFinished, NULL, fileThreads);
-
-  for (size_t i = 0; i < directoryThreads; i++) {
-    pthread_create(&dirThreads[i], NULL, directoryQueue, NULL);
-  }
-
-  for (size_t i = 0; i < fileThreads; i++) {
-    pthread_create(&fThreads[i], NULL, fileQueue, NULL);
-  }
-
   //enque arguments to proper queue
   struct stat arg;
 
@@ -110,6 +99,17 @@ void collectionPhase(){
         }
       }
     }
+  }
+
+  //init barrier
+  //pthread_barrier_init(&directoryFinished, NULL, fileThreads);
+
+  for (size_t i = 0; i < directoryThreads; i++) {
+    pthread_create(&dirThreads[i], NULL, directoryQueue, NULL);
+  }
+
+  for (size_t i = 0; i < fileThreads; i++) {
+    pthread_create(&fThreads[i], NULL, fileQueue, NULL);
   }
 
   //join threads
