@@ -99,6 +99,7 @@ char *dequeue(queue_t *Q)
     Q->activeThreads--;
     if(Q->activeThreads == 0){
       pthread_mutex_unlock(&Q->lock);
+      printf("%s\n","hi" );
   		return NULL;
     }
     while (isempty(Q) && Q->activeThreads>0) {

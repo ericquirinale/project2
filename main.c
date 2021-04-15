@@ -130,7 +130,8 @@ void *directoryQueue(){
   struct dirent *dent;
   struct stat arg;
   while(!isempty(&dirQ) && dirQ.activeThreads>0){ //while directorys to dequeue
-    char *dirName = dequeue(&dirQ);
+    char *dirName = malloc(strlen(dirQ.head->data));
+    dirName = dequeue(&dirQ);
     printf("%s\n%s\n","Dequeued: ", dirName);
     char *filePath = malloc(strlen(dirName)*sizeof(char));
     strcpy(filePath, dirName);
@@ -150,12 +151,15 @@ void *directoryQueue(){
           if(dent->d_name[0] != '.'){
             printf("%s\n%s\n","Enqueued directory: ", filePath);
             enqueue(&dirQ, filePath); //add to directory queue
+            printf("%s", "display: ");
+            display(dirQ.head);
           }
         }
       }
       strcpy(filePath, dirName);
     }
     free(filePath);
+    free(dirName);
   }
 
   return 0;
