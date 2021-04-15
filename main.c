@@ -131,7 +131,7 @@ void *directoryQueue(){
   struct stat arg;
   do{ //while directorys to dequeue
     char *dirName = dequeue(&dirQ);
-    printf("%s\n%s\n","Dequeued: ", dirName);
+    //printf("%s\n%s\n","Dequeued: ", dirName);
     char filePath[strlen(dirName)+1];
     strcpy(filePath, dirName);
     dir = opendir(dirName);
@@ -142,13 +142,13 @@ void *directoryQueue(){
         if(S_ISREG(arg.st_mode)) { //if is file
           if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
             enqueue(&fileQ, dent->d_name); //add to file queue
-            printf("%s\n%s\n", "Enqueued file: ", dent->d_name);
+            //printf("%s\n%s\n", "Enqueued file: ", dent->d_name);
           }
         }
         else if(S_ISDIR(arg.st_mode)) { //if is directory
           if(dent->d_name[0] != '.'){
             enqueue(&dirQ, filePath); //add to directory queue
-            printf("%s\n%s\n","Enqueued directory: ", filePath);
+            //printf("%s\n%s\n","Enqueued directory: ", filePath);
           }
         }
       }

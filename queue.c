@@ -83,7 +83,8 @@ int enqueue(queue_t *Q, char *item){
 
 	pthread_mutex_unlock(&Q->lock);
 
-  display(Q->head);
+  printf("%s", "Enqueued: ");
+  display(Q->head->data);
 
 	return 0;
 }
@@ -109,9 +110,8 @@ char *dequeue(queue_t *Q)
     Q->activeThreads++;
   }
 
-  printf("%s", "Display: ");
+  printf("%s", "Dequeued: ");
   display(Q->head);
-  printf("\n");
   char *item = Q->head->data; //segfault here
 
   if(Q->count>1){
@@ -140,7 +140,7 @@ void display(node *head)
     }
     else
     {
-        printf("%s\n", head->data);
+        printf("%s\t", head->data);
         display(head->next);
     }
 }
