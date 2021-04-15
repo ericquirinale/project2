@@ -84,7 +84,7 @@ int enqueue(queue_t *Q, char *item){
 	pthread_mutex_unlock(&Q->lock);
 
   printf("%s", "Enqueued: ");
-  display(Q->head->data);
+  display(head->data);
 
 	return 0;
 }
