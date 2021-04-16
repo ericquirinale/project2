@@ -14,43 +14,23 @@ typedef struct linkedlist_t{
 
 
 void initLinked(linkedlist_t *ll){ //initizialing a linked list
-       // printf("%s\n", "hi22");
     ll->word = NULL;
     ll->occurences = 1;
     ll->frequency = 0.0;
     ll->next = NULL;
-     // printf("%s\n", "hi33");
 }
 
 void insertAlphabetically(linkedlist_t *ll, char *word) {
-    /*if(ll->word==NULL){
-      ll->word=word;
-    }
-    else{
-      for (; ll!=NULL; ll=ll->next) {
-        if(strcmp(ll->word, word)==0){
-          ll->occurences++;
-          break;
-        }
-        else if (strcmp(ll->next->word, word)<0||ll->next==NULL) {
-          linkedlist_t *new = malloc(sizeof(linkedlist_t));
-          new->word = word;
-          new->next = ll->next;
-          ll->next = new;
-          break;
-        }
-      }
-    }*/
     linkedlist_t *current = ll;
     //check here
     linkedlist_t *prev = NULL;
     if (ll->word != NULL) {
         while (current->word != NULL) {
-            if(strcmp(ll->word, word)==0){
-              ll->occurences++;
+            if(strcmp(current->word, word)==0){
+              current->occurences++;
               return;
             }
-            if (strcmp(current->word, word)<0) {
+            if (strcmp(current->word, word)>0) {
                 linkedlist_t *new = malloc(sizeof(linkedlist_t));
                 initLinked(new);
                 new->word = word;
@@ -79,23 +59,7 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
 }
 
 void displayLinked(linkedlist_t *ptr) {
-
     for (; ptr != NULL; ptr = ptr->next) {
         printf("%s\n", ptr->word);
     }
-}
-
-int main(void) {
-   // printf("%s\n", "hi");
-    linkedlist_t *root = malloc(sizeof(linkedlist_t));
-    initLinked(root);
-
-    insertAlphabetically(root, "apple");
-    insertAlphabetically(root, "cat");
-    insertAlphabetically(root, "bananna");
-    insertAlphabetically(root, "cat");
-
-    displayLinked(root);
-
-    return 0;
 }
