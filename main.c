@@ -137,6 +137,7 @@ void *directoryQueue(){
   struct dirent *dent;
   struct stat arg;
   char *dirName;
+  char bSlash = '/';
   while(dirQ.count>0){ //while directorys to dequeue
     printf("%s", "display: ");
     display(dirQ.head);
@@ -144,8 +145,9 @@ void *directoryQueue(){
     /*if(!dirName){
       break;
     }*/
-    char *filePath = malloc(strlen(dirName)+1);
+    char *filePath = malloc(strlen(dirName)+2);
     strcpy(filePath, dirName);
+    strcpy(filePath, "/");
     dir = opendir(dirName);
     while((dent = readdir(dir)) != NULL){ //loop through directory
       filePath = (char *) realloc(filePath, strlen(dirName)+strlen(dent->d_name)+1);
@@ -159,6 +161,7 @@ void *directoryQueue(){
         }
         else if(S_ISDIR(arg.st_mode)) { //if is directory
           if(dent->d_name[0] != '.'){
+            strncat(filePath, &bSlash, 1);
             printf("%s\n%s\n","Enqueued directory: ", filePath);
             enqueue(&dirQ, filePath); //add to directory queue
             printf("%s", "display2: ");
