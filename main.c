@@ -113,6 +113,8 @@ void collectionPhase(){
     }
   }
 
+  Queue_done(&dirQ);
+
   //join threads
   void *retval;
   for (size_t j = 0; j < directoryThreads; j++) {
@@ -130,38 +132,40 @@ void *directoryQueue(){
   DIR *dir;
   struct dirent *dent;
   struct stat arg;
-  while(dirQ.activeThreads>0){ //while directorys to dequeue
+  char *dirName;
+  while(!dirQ.done && dirQ.count>0){ //while directorys to dequeue
     printf("%s", "display: ");
     display(dirQ.head);
-    char *dirName;
     dirName = dequeue(&dirQ);
-    if(dirName!=NULL){
-      char *filePath = malloc(strlen(dirName)*sizeof(char));
-      strcpy(filePath, dirName);
-      dir = opendir(dirName);
-      while((dent = readdir(dir)) != NULL){ //loop through directory
-        filePath = (char *) realloc(filePath, strlen(dirName)+strlen(dent->d_name));
-        strcat(filePath, dent->d_name);
-        //printf("%s\n", filePath);
-        if (stat(filePath, &arg)==0){
-          if(S_ISREG(arg.st_mode)) { //if is file
-            if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
-              printf("%s\n%s\n", "Enqueued file: ", dent->d_name);
-              enqueue(&fileQ, filePath); //add to file queue
-            }
-          }
-          else if(S_ISDIR(arg.st_mode)) { //if is directory
-            if(dent->d_name[0] != '.'){
-              printf("%s\n%s\n","Enqueued directory: ", filePath);
-              enqueue(&dirQ, filePath); //add to directory queue
-            }
+    if(!dirName){
+      break;
+    }
+    char *filePath = malloc(strlen(dirName)*sizeof(char));
+    strcpy(filePath, dirName);
+    dir = opendir(dirName);
+    while((dent = readdir(dir)) != NULL){ //loop through directory
+      filePath = (char *) realloc(filePath, strlen(dirName)+strlen(dent->d_name));
+      strcat(filePath, dent->d_name);
+      //printf("%s\n", filePath);
+      if (stat(filePath, &arg)==0){
+        if(S_ISREG(arg.st_mode)) { //if is file
+          if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
+            printf("%s\n%s\n", "Enqueued file: ", dent->d_name);
+            enqueue(&fileQ, filePath); //add to file queue
           }
         }
-        strcpy(filePath, dirName);
+        else if(S_ISDIR(arg.st_mode)) { //if is directory
+          if(dent->d_name[0] != '.'){
+            printf("%s\n%s\n","Enqueued directory: ", filePath);
+            enqueue(&dirQ, filePath); //add to directory queue
+            printf("%s", "display2: ");
+            display(dirQ.head);
+          }
+        }
       }
-      free(filePath);
+      strcpy(filePath, dirName);
     }
-
+    free(filePath);
   }
 
   return 0;
