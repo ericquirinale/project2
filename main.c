@@ -81,9 +81,21 @@ void collectionPhase(){
   init(&dirQ);
   init(&fileQ);
 
+
   //create threads and start
   pthread_t dirThreads[directoryThreads];
   pthread_t fThreads[fileThreads];
+
+  //init barrier
+  //pthread_barrier_init(&directoryFinished, NULL, fileThreads);
+
+  for (size_t i = 0; i < directoryThreads; i++) {
+    pthread_create(&dirThreads[i], NULL, directoryQueue, NULL);
+  }
+
+  for (size_t i = 0; i < fileThreads; i++) {
+    pthread_create(&fThreads[i], NULL, fileQueue, NULL);
+  }
 
   //enque arguments to proper queue
   struct stat arg;
@@ -99,17 +111,6 @@ void collectionPhase(){
         }
       }
     }
-  }
-
-  //init barrier
-  //pthread_barrier_init(&directoryFinished, NULL, fileThreads);
-
-  for (size_t i = 0; i < directoryThreads; i++) {
-    pthread_create(&dirThreads[i], NULL, directoryQueue, NULL);
-  }
-
-  for (size_t i = 0; i < fileThreads; i++) {
-    pthread_create(&fThreads[i], NULL, fileQueue, NULL);
   }
 
   //join threads
@@ -130,9 +131,10 @@ void *directoryQueue(){
   struct dirent *dent;
   struct stat arg;
   while(!isempty(&dirQ) && dirQ.activeThreads>0){ //while directorys to dequeue
+    printf("%s", "display: ");
+    display(dirQ.head);
     char *dirName = malloc(strlen(dirQ.head->data));
     dirName = dequeue(&dirQ);
-    printf("%s\n%s\n","Dequeued: ", dirName);
     char *filePath = malloc(strlen(dirName)*sizeof(char));
     strcpy(filePath, dirName);
     dir = opendir(dirName);
@@ -151,8 +153,6 @@ void *directoryQueue(){
           if(dent->d_name[0] != '.'){
             printf("%s\n%s\n","Enqueued directory: ", filePath);
             enqueue(&dirQ, filePath); //add to directory queue
-            printf("%s", "display: ");
-            display(dirQ.head);
           }
         }
       }
@@ -166,12 +166,12 @@ void *directoryQueue(){
 
 void *fileQueue(){
     char *fileName = NULL;
-    /*while(dequeue(&fileQ, fileName)==0){ //while files to dequeue
+  /*  while(dequeue(&fileQ, fileName)==0){ //while files to dequeue
       FILE *fp = fopen("fileName", "r");
-      //linkedlist_t wfrequency = WFD(fp);
-      //add to wfdrep
-    }*/
-    return 0;
+      linkedlist_t wfrequency = WFD(fp);
+      push();
+    }
+    return 0;*/
 }
 
 /*need to create WFD Data Structure, WFD Repo

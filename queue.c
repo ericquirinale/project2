@@ -18,6 +18,7 @@ typedef struct {
   int activeThreads;
 	int open;
 	int count;
+  int done;
 	pthread_mutex_t lock;
 	pthread_cond_t read_ready;
 	//pthread_cond_t write_ready;
@@ -25,6 +26,7 @@ typedef struct {
 
 int isempty(queue_t *q);
 void display(node *head);
+void Queue_done(queue_t *Q);
 
 int init(queue_t *Q)
 {
@@ -32,6 +34,7 @@ int init(queue_t *Q)
 	Q->head = NULL;
 	Q->tail = NULL;
 	Q->open = 1;
+  Q->done = 0;
   Q->activeThreads = directoryThreads;
 	pthread_mutex_init(&Q->lock, NULL);
 	pthread_cond_init(&Q->read_ready, NULL);
@@ -81,11 +84,15 @@ int enqueue(queue_t *Q, char *item){
 
 	Q->count++;
 
-	pthread_cond_signal(&Q->read_ready);
+  pthread_mutex_lock(&Q->lock);
 
-	pthread_mutex_unlock(&Q->lock);
+  Q->done = 1;
 
-  printf("%s%s\n", "Enqueued: ", item);
+  // In case another thread is blocked in dequeue().
+  pthread_cond_signal(&Q->read_ready);
+  pthread_mutex_unlock(&Q->lock);
+
+  //printf("%s%s\n", "Enqueued: ", item);
 
 	return 0;
 }
@@ -93,28 +100,54 @@ int enqueue(queue_t *Q, char *item){
 
 char *dequeue(queue_t *Q)
 {
-	pthread_mutex_lock(&Q->lock); //lock queue
+  pthread_mutex_lock(&Q->lock);
 
   if(isempty(Q)){
-    Q->activeThreads--;
-    if(Q->activeThreads == 0){
-      pthread_mutex_unlock(&Q->lock);
-      printf("%s\n","hi" );
-  		return NULL;
-    }
-    while (isempty(Q) && Q->activeThreads>0) {
-  		pthread_cond_wait(&Q->read_ready, &Q->lock);
-  	}
-    if (isempty(Q)){
-  		pthread_mutex_unlock(&Q->lock);
-  		return NULL;
-  	}
-    Q->activeThreads++;
+  Q->activeThreads--;
+  if(Q->activeThreads == 0){
+    pthread_mutex_unlock(&Q->lock);
+    return NULL;
   }
+  while (isempty(Q) && Q->activeThreads>0) {
+    pthread_cond_wait(&Q->read_ready, &Q->lock);
+  }
+  if (isempty(Q)){
+    pthread_mutex_unlock(&Q->lock);
+    return NULL;
+  }
+  Q->activeThreads++;
+}
 
-  //printf("%s", "Dequeued: ");
+
+
+//while (!Q->head && !Q->done)
+//   pthread_cond_wait(&Q->read_ready, &Q->lock);
+
+char *rv;
+if (Q->head) {
+   rv = Q->head->data;
+
+   Q->head = Q->head->next;
+   if (!Q->head)
+      Q->tail = NULL;
+
+   --Q->count;
+} else {
+   // done() was called and queue is empty.
+   rv = NULL;
+}
+
+// In case another thread is blocked in dequeue().
+  pthread_cond_signal(&Q->read_ready);
+  pthread_mutex_unlock(&Q->lock);
+  return rv;
+
+  pthread_mutex_lock(&Q->lock); //lock queue
+
+
+/*  //printf("%s", "Dequeued: ");
   //display(Q->head);
-  char *item = (char *) malloc(strlen(Q->head->data) + 1);
+  char *item = (char *) malloc(strlen(Q->head->data) + 1); //segault here
   item = Q->head->data;
 
   if(Q->count>1){
@@ -127,7 +160,7 @@ char *dequeue(queue_t *Q)
 
 	pthread_mutex_unlock(&Q->lock);
 
-	return item;
+	return item;*/
 }
 
 int isempty(queue_t *q)
@@ -158,4 +191,8 @@ int qclose(queue_t *Q)
 	pthread_mutex_unlock(&Q->lock);
 
 	return 0;
+}
+
+void Queue_done(queue_t *Q) {
+
 }

@@ -12,6 +12,7 @@ typedef struct {
   int activeThreads;
 	int open;
 	int count;
+  int done;
 	pthread_mutex_t lock;
 	pthread_cond_t read_ready;
 	//pthread_cond_t write_ready;
@@ -24,5 +25,6 @@ char *dequeue(queue_t *Q);
 int qclose(queue_t *Q);
 int isempty(queue_t *q);
 void display(node *head);
+void Queue_done(queue_t *Q);
 
 #endif
