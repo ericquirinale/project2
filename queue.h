@@ -25,6 +25,6 @@ char *dequeue(queue_t *Q);
 int qclose(queue_t *Q);
 int isempty(queue_t *q);
 void display(node *head);
-void Queue_done(queue_t *Q);
+//void Queue_done(queue_t *Q);
 
 #endif

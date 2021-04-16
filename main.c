@@ -83,10 +83,10 @@ void collectionPhase(){
 
 
   //create threads and start
-  pthread_t dirThreads[directoryThreads];
-  pthread_t fThreads[fileThreads];
+  //pthread_t dirThreads[directoryThreads];
+  //pthread_t fThreads[fileThreads];
 
-  //init barrier
+  /*init barrier
   //pthread_barrier_init(&directoryFinished, NULL, fileThreads);
 
   for (size_t i = 0; i < directoryThreads; i++) {
@@ -95,7 +95,7 @@ void collectionPhase(){
 
   for (size_t i = 0; i < fileThreads; i++) {
     pthread_create(&fThreads[i], NULL, fileQueue, NULL);
-  }
+  }*/
 
   //enque arguments to proper queue
   struct stat arg;
@@ -113,11 +113,13 @@ void collectionPhase(){
     }
   }
 
+  directoryQueue();
+
   //sleep(1);
 
-  Queue_done(&dirQ);
+  //Queue_done(&dirQ);
 
-  //join threads
+  /*join threads
   void *retval;
   for (size_t j = 0; j < directoryThreads; j++) {
     pthread_join(dirThreads[j], &retval);
@@ -125,7 +127,7 @@ void collectionPhase(){
 
   for (size_t l = 0; l < fileThreads; l++) {
     pthread_join(fThreads[l], &retval);
-  }
+  }*/
 
 
 }
@@ -135,20 +137,19 @@ void *directoryQueue(){
   struct dirent *dent;
   struct stat arg;
   char *dirName;
-  while(!dirQ.done || dirQ.count>0){ //while directorys to dequeue
+  while(dirQ.count>0){ //while directorys to dequeue
     printf("%s", "display: ");
     display(dirQ.head);
     dirName = dequeue(&dirQ);
-    if(!dirName){
+    /*if(!dirName){
       break;
-    }
-    char *filePath = malloc(strlen(dirName)*sizeof(char));
+    }*/
+    char *filePath = malloc(strlen(dirName)+1);
     strcpy(filePath, dirName);
     dir = opendir(dirName);
     while((dent = readdir(dir)) != NULL){ //loop through directory
-      filePath = (char *) realloc(filePath, strlen(dirName)+strlen(dent->d_name));
+      filePath = (char *) realloc(filePath, strlen(dirName)+strlen(dent->d_name)+1);
       strcat(filePath, dent->d_name);
-      //printf("%s\n", filePath);
       if (stat(filePath, &arg)==0){
         if(S_ISREG(arg.st_mode)) { //if is file
           if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix

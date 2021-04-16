@@ -26,7 +26,7 @@ typedef struct {
 
 int isempty(queue_t *q);
 void display(node *head);
-void Queue_done(queue_t *Q);
+//void Queue_done(queue_t *Q);
 
 int init(queue_t *Q)
 {
@@ -34,10 +34,10 @@ int init(queue_t *Q)
 	Q->head = NULL;
 	Q->tail = NULL;
 	Q->open = 1;
-  Q->done = 0;
-  Q->activeThreads = directoryThreads;
-	pthread_mutex_init(&Q->lock, NULL);
-	pthread_cond_init(&Q->read_ready, NULL);
+  //Q->done = 0;
+  //Q->activeThreads = directoryThreads;
+	//pthread_mutex_init(&Q->lock, NULL);
+	//pthread_cond_init(&Q->read_ready, NULL);
 	//pthread_cond_init(&Q->write_ready, NULL);
 
 	return 0;
@@ -56,29 +56,26 @@ int destroy(queue_t *Q)
 // add item to end of queue
 // if the queue is full, block until space becomes available
 int enqueue(queue_t *Q, char *item){
-	pthread_mutex_lock(&Q->lock);
+	//pthread_mutex_lock(&Q->lock);
 
-	/*while (Q->count == QSIZE && Q->open) {
-		pthread_cond_wait(&Q->write_ready, &Q->lock);
-	}*/
+	/*
 	if (!Q->open) {
 		pthread_mutex_unlock(&Q->lock);
 		return -1;
-	}
+	}*/
 
-	//unsigned i = Q->head + Q->count;
-	//if (i >= QSIZE) i -= QSIZE;
 
 	node *tmp;
 	tmp = malloc(sizeof(node));
-	tmp->data = item;
+  char *tmpData = malloc(strlen(item)+1);
+  strcpy(tmpData, item);
+	tmp->data = tmpData;
 	tmp->next = NULL;
 	if(Q->count>0){
 		Q->tail->next = tmp;
 		Q->tail = tmp;
 	}
 	else{
-    //printf("%s%d\n", "wuz empty, ", Q->count);
 		Q->head = Q->tail = tmp;
 	}
 
@@ -86,11 +83,10 @@ int enqueue(queue_t *Q, char *item){
 
   //pthread_mutex_unlock(&Q->lock);
 
-  //Q->done = 1;
 
   // In case another thread is blocked in dequeue().
-  pthread_cond_signal(&Q->read_ready);
-  pthread_mutex_unlock(&Q->lock);
+  //pthread_cond_signal(&Q->read_ready);
+  //pthread_mutex_unlock(&Q->lock);
 
   //printf("%s%s\n", "Enqueued: ", item);
 
@@ -100,30 +96,7 @@ int enqueue(queue_t *Q, char *item){
 
 char *dequeue(queue_t *Q)
 {
-  pthread_mutex_lock(&Q->lock);
-
-   while (!Q->head && !Q->done)
-      pthread_cond_wait(&Q->read_ready, &Q->lock);
-
-   char *rv;
-   if (Q->head) {
-      rv = Q->head->data;
-
-      Q->head = Q->head->next;
-      if (!Q->head)
-         Q->tail = NULL;
-
-      --Q->count;
-   } else {
-      // done() was called and queue is empty.
-      rv = NULL;
-   }
-
-   // In case another thread is blocked in dequeue().
-   pthread_cond_signal(&Q->read_ready);
-   pthread_mutex_unlock(&Q->lock);
-   return rv;
-/*  pthread_mutex_lock(&Q->lock);
+  /*pthread_mutex_lock(&Q->lock);
 
   if(isempty(Q)){
   Q->activeThreads--;
@@ -139,7 +112,29 @@ char *dequeue(queue_t *Q)
     return NULL;
   }
   Q->activeThreads++;
-}
+}*/
+
+   char *rv;
+   if (Q->head) {
+      rv = Q->head->data;
+
+      Q->head = Q->head->next;
+      if (!Q->head)
+         Q->tail = NULL;
+
+      --Q->count;
+   } else {
+      // done() was called and queue is empty.
+      rv = NULL;
+   }
+
+
+
+   //pthread_mutex_unlock(&Q->lock);
+   return rv;
+/*  pthread_mutex_lock(&Q->lock);
+
+
 
 
 
@@ -196,7 +191,7 @@ int qclose(queue_t *Q)
 	return 0;
 }
 
-void Queue_done(queue_t *Q) {
+/*void Queue_done(queue_t *Q) {
    pthread_mutex_lock(&Q->lock);
 
    Q->done = 1;
@@ -204,4 +199,4 @@ void Queue_done(queue_t *Q) {
    // In case another thread is blocked in dequeue().
    pthread_cond_signal(&Q->read_ready);
    pthread_mutex_unlock(&Q->lock);
-}
+}*/
