@@ -6,12 +6,15 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <pthread.h>
+#include <ctype.h>
 #include "queue.h"
 #include "linkedList.h"
+#include "wfdRepo.h"
 
 void collectionPhase();
 void *directoryQueue();
 void *fileQueue();
+linkedlist_t WFD(FILE* f);
 
 //global variables
 
@@ -25,6 +28,8 @@ int argcG;
 char **argvG;
 queue_t dirQ;
 queue_t fileQ;
+
+wfdrepo_t wfdRepo;
 
 int main(int argc, char const *argv[]) {
   //set global vars
@@ -80,6 +85,7 @@ void collectionPhase(){
 
   init(&dirQ);
   init(&fileQ);
+  initRepo(&wfdRepo);
 
 
   //create threads and start
@@ -178,40 +184,39 @@ void *directoryQueue(){
 }
 
 void *fileQueue(){
-    char *fileName = NULL;
-  /*  while(dequeue(&fileQ, fileName)==0){ //while files to dequeue
-      FILE *fp = fopen("fileName", "r");
-      linkedlist_t wfrequency = WFD(fp);
-      push();
-    }*/
+    char *fileName;
+    while(fileQ.count>0){ //while files to dequeue
+      fileName = dequeue(&fileQ);
+      FILE *fp = fopen(fileName, "r");
+      linkedlist_t wfrequency;
+      initLinked(&wfrequency);
+      wfrequency = WFD(fp);
+      insertRepo(&wfdRepo, fileName, &wfrequency);
+    }
     return 0;
 }
 
-/*need to create WFD Data Structure, WFD Repo
-LL WFD(FILE* f){// returns a Linked List for the WFD
+//need to create WFD Data Structure, WFD Repo
+linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
+  char *buf = malloc(sizeof(char)*1000);
+  char *word = malloc(sizeof(char)*1000);
+  char tmp;
+  linkedlist_t wfd;
 
-  char *word;
-  char *official;
-
-  while(fscanf(f, "%s", word) == 1){
-
-    size_t length = strlen(word);
-    size_t i = 0;
-    char *letter;
-
-    for(; i < length; i++){
-
-      letter = word[i];
-      letter = tolower(letter);
-
-      if(!ispunct(letter)){
-
-        strcat(offical, letter);
+  while(fscanf(f, "%s", buf) == 1){ //checking each individual word
+      for (size_t i = 0; i < strlen(buf); i++) {
+        tmp = tolower(buf[i]);
+        if(!ispunct(tmp)){ //checking if a letter is not a punctuation mark
+        word[i] = tmp;
+        }
       }
+      insertAlphabetically(&wfd, word);
     }
+    updateFrequency(&wfd);
+    return wfd;
   }
-}
 
-int JSD(linkedlist_t wfd1, linkedlist_t wfd2){
+
+/*int JSD(linkedlist_t wfd1, linkedlist_t wfd2){
   linkedlist_t meanF; //mean frequency linkedlist
 }*/

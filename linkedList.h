@@ -9,4 +9,10 @@ typedef struct linkedlist_t{
 
 } linkedlist_t;
 
+void initLinked(linkedlist_t *ll);
+void insertAlphabetically(linkedlist_t *ll, char *word);
+void displayLinked(linkedlist_t *ptr);
+int listCount(linkedlist_t *ptr);
+void updateFrequency(linkedlist_t *ptr);
+
 #endif

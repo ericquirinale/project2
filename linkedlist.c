@@ -63,3 +63,18 @@ void displayLinked(linkedlist_t *ptr) {
         printf("%s\n", ptr->word);
     }
 }
+
+int listCount(linkedlist_t *ptr) {
+    int count = 0;
+    for (; ptr != NULL; ptr = ptr->next) {
+        count += ptr->occurences;
+    }
+    return count;
+}
+
+void updateFrequency(linkedlist_t *ptr) {
+    int count = listCount(ptr);
+    for (; ptr != NULL; ptr = ptr->next) {
+        ptr->frequency = (ptr->occurences/count);
+    }
+}
