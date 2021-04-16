@@ -84,7 +84,7 @@ int enqueue(queue_t *Q, char *item){
 
 	Q->count++;
 
-  pthread_mutex_lock(&Q->lock);
+  pthread_mutex_unlock(&Q->lock);
 
   Q->done = 1;
 
@@ -138,11 +138,11 @@ if (Q->head) {
 }
 
 // In case another thread is blocked in dequeue().
-  pthread_cond_signal(&Q->read_ready);
+  //pthread_cond_signal(&Q->read_ready);
   pthread_mutex_unlock(&Q->lock);
   return rv;
 
-  pthread_mutex_lock(&Q->lock); //lock queue
+  //pthread_mutex_lock(&Q->lock); //lock queue
 
 
 /*  //printf("%s", "Dequeued: ");

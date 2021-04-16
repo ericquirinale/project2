@@ -130,7 +130,7 @@ void *directoryQueue(){
   DIR *dir;
   struct dirent *dent;
   struct stat arg;
-  while(!isempty(&dirQ) && dirQ.activeThreads>0){ //while directorys to dequeue
+  while(!isempty(&dirQ) || dirQ.activeThreads>0){ //while directorys to dequeue
     printf("%s", "display: ");
     display(dirQ.head);
     char *dirName = malloc(strlen(dirQ.head->data));
@@ -170,8 +170,8 @@ void *fileQueue(){
       FILE *fp = fopen("fileName", "r");
       linkedlist_t wfrequency = WFD(fp);
       push();
-    }
-    return 0;*/
+    }*/
+    return 0;
 }
 
 /*need to create WFD Data Structure, WFD Repo
