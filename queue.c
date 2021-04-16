@@ -84,7 +84,7 @@ int enqueue(queue_t *Q, char *item){
 
 	Q->count++;
 
-  pthread_mutex_unlock(&Q->lock);
+  //pthread_mutex_unlock(&Q->lock);
 
   //Q->done = 1;
 

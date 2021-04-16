@@ -113,6 +113,8 @@ void collectionPhase(){
     }
   }
 
+  //sleep(1);
+
   Queue_done(&dirQ);
 
   //join threads
@@ -133,7 +135,7 @@ void *directoryQueue(){
   struct dirent *dent;
   struct stat arg;
   char *dirName;
-  while(!dirQ.done && dirQ.count>0){ //while directorys to dequeue
+  while(!dirQ.done || dirQ.count>0){ //while directorys to dequeue
     printf("%s", "display: ");
     display(dirQ.head);
     dirName = dequeue(&dirQ);
