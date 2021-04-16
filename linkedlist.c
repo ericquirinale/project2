@@ -23,7 +23,7 @@ void initLinked(linkedlist_t *ll){ //initizialing a linked list
 }
 
 void insertAlphabetically(linkedlist_t *ll, char *word) {
-    if(ll->word==NULL){
+    /*if(ll->word==NULL){
       ll->word=word;
     }
     else{
@@ -40,6 +40,41 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
           break;
         }
       }
+    }*/
+    linkedlist_t *current = ll;
+    //check here
+    linkedlist_t *prev = NULL;
+    if (ll->word != NULL) {
+        while (current->word != NULL) {
+            if(strcmp(ll->word, word)==0){
+              ll->occurences++;
+              return;
+            }
+            if (strcmp(current->word, word)<0) {
+                linkedlist_t *new = malloc(sizeof(linkedlist_t));
+                initLinked(new);
+                new->word = word;
+                new->next = current;
+                //check here
+                if (prev != NULL) {
+                    prev->next = new;
+                }
+                return;
+            }
+            if(current->next==NULL){
+              linkedlist_t *new = malloc(sizeof(linkedlist_t));
+              initLinked(new);
+              new->word = word;
+              current->next = new;
+              return;
+            }
+            //check here
+            prev = current;
+            current = current->next;
+        }
+    }
+    else{
+      ll->word=word;
     }
 }
 
