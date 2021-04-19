@@ -7,6 +7,7 @@
 #include <dirent.h>
 #include <pthread.h>
 #include <ctype.h>
+#include <math.h>
 #include "queue.h"
 #include "linkedList.h"
 #include "wfdRepo.h"
@@ -17,6 +18,8 @@ void *directoryQueue();
 void *fileQueue();
 void analysisPhase(wfdrepo_t *repo);
 linkedlist_t WFD(FILE* f);
+double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2);
+double logBase2(double x);
 
 //global variables
 
@@ -245,3 +248,78 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
     updateFrequency(&wfd);
     return wfd;
   }
+
+double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
+ linkedlist_t *meanF;
+ linkedlist_t *head = meanF;
+ initLinked(meanF); //mean frequency linkedlist
+
+ linkedlist_t *tmp1 = wfd1;
+ linkedlist_t *tmp2 = wfd2;
+
+  double jsd;
+  double kld1;
+  double kld2;
+
+  while(wfd1->next!=NULL){
+    insertAlphabetically(meanF, wfd1->word);
+  }
+
+  while(tmp2->next!=NULL){
+    if(strcmp(tmp1->word, tmp2->word)==0){ //if the words are equal add occurences
+      meanF->occurences = tmp1->occurences + tmp2->occurences;
+      tmp1 = tmp1->next;
+      tmp2 = tmp2->next;
+    }
+    else if(strcmp(tmp1->word, tmp2->word)>0){
+      insertAlphabetically(meanF, tmp2->word);
+      tmp2 = tmp2->next;
+    }
+    else{
+      tmp2 = tmp2->next;
+    }
+  }
+
+   updateFrequency(meanF);
+
+   while(head != NULL){
+     while(wfd1 != NULL){
+       if(strcmp(head->word, wfd1->word) == 0){
+         kld1 += (wfd1->occurences * logBase2(wfd1->occurences/head->occurences));
+         wfd1 = wfd1->next;
+         head = head->next;
+       }
+       else if (strcmp(meanF->word, wfd1->word)>0) {
+         wfd1 = wfd1->next;
+       }
+       else{
+         head = head->next;
+       }
+     }
+   }
+
+   head = meanF;
+
+   while(head != NULL){
+     while(wfd2 != NULL){
+       if(strcmp(head->word, wfd2->word) == 0){
+         kld2 += (wfd2->occurences * logBase2(wfd2->occurences/head->occurences));
+         wfd2 = wfd2->next;
+         head = head->next;
+       }
+       else if (strcmp(meanF->word, wfd1->word)>0) {
+         wfd2 = wfd2->next;
+       }
+       else{
+         head = head->next;
+       }
+     }
+   }
+
+  jsd = sqrt((0.5 * kld1) + (0.5 * kld2));
+  return jsd;
+}
+
+double logBase2(double x){ //calculates log base 2 of a function
+  return log(x) / log(2.0);
+}
