@@ -145,29 +145,21 @@ void collectionPhase(){
 }
 
 void analysisPhase(wfdrepo_t *repo){
-/*create analysis threads
--for each pair of files in repo
-	-call JSD()
-	-add JSD to array
-  \
-
-//kill threads
-//Sort array using qsort()*/
 wfdrepo_t *tmp = repo->next;
 int size = repoSize(repo);
-jsdlist_t *jsdArray;
+jsdlist_t jsdArray;
 double jsd;
-initJSD(jsdArray);
+initJSD(&jsdArray);
 while (repo->next!=NULL) {
   while (tmp!=NULL) {
     jsd = JSD(repo->wfd, tmp->wfd);
-    insertJsd(jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
+    insertJsd(&jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
     tmp = tmp->next;
   }
   repo = repo->next;
   tmp = repo->next;
 }
-displayJSD(jsdArray);
+displayJSD(&jsdArray);
 }
 
 
