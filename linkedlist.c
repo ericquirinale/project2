@@ -9,7 +9,6 @@ typedef struct linkedlist_t{
     int occurences;
     double frequency;
     struct linkedlist_t *next;
-    struct linkedlist_t *head;
 
 } linkedlist_t;
 
@@ -36,19 +35,18 @@ void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->occurences = 1;
     ll->frequency = 0.0;
     ll->next = NULL;
-    ll->head->next = ll;
 }
 
 linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
-    linkedlist_t *current = ll->head->next;
     //check here
+    linkedlist_t *current = ll;
     linkedlist_t *prev = NULL;
     if (ll->word != NULL) {
         int isHead = 1;
         while (current->word != NULL) {
             if(strcmp(current->word, word)==0){ //update occurences
               current->occurences++;
-              return ll->head;
+              return ll;
             }
             //create new node
             linkedlist_t *new = malloc(sizeof(linkedlist_t));
@@ -58,19 +56,18 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
             new->word=tmpData;
             if (strcmp(current->word, word)>0){ //insert alphabetically
                 if(isHead==1){ //insert in front
-                  new->next = ll->head;
-                  ll->head->next = new;
+                  new->next = ll;
+                  return new;
                 }
                 else{
                   new->next=current;
                   prev->next=new;
                 }
-                return ll->head;
+                return ll;
             }
             if(current->next==NULL){ //insert at the end
-
               current->next = new;
-              return ll->head;
+              return ll;
             }
             //check here
             prev = current;
@@ -83,9 +80,9 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
       char *tmpData = malloc(strlen(word)+1);
       strcpy(tmpData, word);
       ll->word=tmpData;
-      return ll->head;
+      return ll;
     }
-    return ll->head;
+    return ll;
 }
 
 void displayLinked(linkedlist_t *ptr) {
