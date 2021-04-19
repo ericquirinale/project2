@@ -8,13 +8,13 @@ entry in
 the
 directory
 listing
-(d_name)  
+(d_name)
 -> file
 names are
 only
 unique
 within a
-directory 
+directory
 -> a file
 name by
 itself is
@@ -22,7 +22,7 @@ useless
 unless we
 know what
 directory
-it is in 
+it is in
 Most
 programs
 and
@@ -40,7 +40,7 @@ file from
 a
 particular
 starting
-point     
+point
 Absolute
 paths
 begin with
@@ -48,6 +48,6 @@ begin with
 root of
 the
 directory
-tree)     
+tree)
 
 /foo/bar/baz/quux

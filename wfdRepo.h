@@ -8,8 +8,9 @@ typedef struct wfdrepo_t{
     struct wfdrepo_t *next;
 } wfdrepo_t;
 
-wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd);
+void insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd);
 void initRepo(wfdrepo_t *repo);
+void displayWFD(wfdrepo_t *ptr);
 int repoSize(wfdrepo_t *repo);
 
 #endif

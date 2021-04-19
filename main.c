@@ -210,27 +210,33 @@ void *fileQueue(){
       wfrequency = WFD(fp);
       insertRepo(&wfdRepo, fileName, &wfrequency);
     }
+    printf("%s\n", "Display wfd repo: ");
+    displayWFD(&wfdRepo);
     return 0;
 }
 
 //need to create WFD Data Structure, WFD Repo
 linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
-  char *buf = malloc(sizeof(char)*1000);
-  char *word = malloc(sizeof(char)*1000);
-  char tmp;
+  char buf[1000];
+  char tmp[1000];
+  int tmpCount = 0;
   linkedlist_t wfd;
+  initLinked(&wfd);
 
   while(fscanf(f, "%s", buf) == 1){ //checking each individual word
       for (size_t i = 0; i < strlen(buf); i++) {
-        tmp = tolower(buf[i]);
-        if(!ispunct(tmp)){ //checking if a letter is not a punctuation mark
-        word[i] = tmp;
+        if(!ispunct(buf[i])){ //checking if a letter is not a punctuation mark
+        tmp[tmpCount] = tolower(buf[i]);
+        tmpCount++;
         }
       }
-      insertAlphabetically(&wfd, word);
+      tmpCount = 0;
+      insertAlphabetically(&wfd, tmp);
+      memset(buf, 0, sizeof(buf));
+      memset(tmp, 0, sizeof(tmp));
     }
     updateFrequency(&wfd);
-    displayLinked(&wfd);
+    //displayLinked(&wfd);
     return wfd;
   }
 

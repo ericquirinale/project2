@@ -13,10 +13,11 @@ typedef struct wfdrepo_t{
 } wfdrepo_t;
 
 void initRepo(wfdrepo_t *repo);
-wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd);
+void insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd);
 int repoSize(wfdrepo_t *repo);
+void displayWFD(wfdrepo_t *ptr);
 
-wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd) { //returns pointer to head of list
+void insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd) { //returns pointer to head of list
   wfdrepo_t *current = head;
   linkedlist_t *tmpWFD = malloc(sizeof(linkedlist_t));
   tmpWFD = wfd;
@@ -25,20 +26,25 @@ wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd) { //retur
   if (current->fName!=NULL) {
     wfdrepo_t *new;
     new = malloc(sizeof(wfdrepo_t));
-    initRepo(new);
-
     new->fName = tmpfName;
     new->numTokens = listCount(wfd);
     new->wfd = tmpWFD;
-    new->next = current;
-    return new;
+    while(current->next!=NULL){
+      current=current->next;
+    }
+    current->next=new;
   }
   else{
     current->fName = tmpfName;
     current->numTokens = listCount(wfd);
     current->wfd = tmpWFD;
-    return current;
   }
+}
+
+void displayWFD(wfdrepo_t *ptr) {
+    for (; ptr != NULL; ptr = ptr->next) {
+        printf("%s\t%d\n", ptr->fName, ptr->numTokens);
+    }
 }
 
 void initRepo(wfdrepo_t *repo){
