@@ -218,7 +218,8 @@ void *fileQueue(){
 //need to create WFD Data Structure, WFD Repo
 linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
   char buf[1000];
-  char tmp[1000];
+  char word[1000];
+  char *tmp = word;
   int tmpCount = 0;
   linkedlist_t wfd;
   initLinked(&wfd);
@@ -226,17 +227,18 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
   while(fscanf(f, "%s", buf) == 1){ //checking each individual word
       for (size_t i = 0; i < strlen(buf); i++) {
         if(!ispunct(buf[i])){ //checking if a letter is not a punctuation mark
-        tmp[tmpCount] = tolower(buf[i]);
+        word[tmpCount] = tolower(buf[i]);
         tmpCount++;
         }
       }
       tmpCount = 0;
       insertAlphabetically(&wfd, tmp);
       memset(buf, 0, sizeof(buf));
-      memset(tmp, 0, sizeof(tmp));
+      memset(word, 0, sizeof(word));
     }
     updateFrequency(&wfd);
-    //displayLinked(&wfd);
+    printf("%s\n", "displaying");
+    displayLinked(&wfd);
     return wfd;
   }
 
