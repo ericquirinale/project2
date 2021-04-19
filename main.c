@@ -219,7 +219,6 @@ void *fileQueue(){
 linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
   char buf[1000];
   char word[1000];
-  char *tmp = word;
   int tmpCount = 0;
   linkedlist_t wfd;
   initLinked(&wfd);
@@ -232,7 +231,7 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      insertAlphabetically(&wfd, tmp);
+      insertAlphabetically(&wfd, word);
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
     }

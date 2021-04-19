@@ -33,7 +33,9 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
             if (strcmp(current->word, word)>0) {
                 linkedlist_t *new = malloc(sizeof(linkedlist_t));
                 initLinked(new);
-                new->word = word;
+                char *tmpData = malloc(strlen(word)+1);
+                strcpy(tmpData, word);
+                ll->word=tmpData;
                 new->next = current;
                 //check here
                 if (prev != NULL) {
@@ -44,7 +46,9 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
             if(current->next==NULL){
               linkedlist_t *new = malloc(sizeof(linkedlist_t));
               initLinked(new);
-              new->word = word;
+              char *tmpData = malloc(strlen(word)+1);
+              strcpy(tmpData, word);
+              ll->word=tmpData;
               current->next = new;
               return;
             }
@@ -54,7 +58,9 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
         }
     }
     else{
-      ll->word=word;
+      char *tmpData = malloc(strlen(word)+1);
+      strcpy(tmpData, word);
+      ll->word=tmpData;
     }
 }
 
