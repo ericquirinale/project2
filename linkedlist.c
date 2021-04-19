@@ -27,7 +27,7 @@ int main(int argc, char const *argv[]) {
   insertAlphabetically(list, "dog");
   insertAlphabetically(list, "cat");
   insertAlphabetically(list, "dandellion");
-  displayLinked(list);
+  displayLinked(list->head);
   return 0;
 }
 
