@@ -19,17 +19,17 @@ void displayLinked(linkedlist_t *ptr);
 int listCount(linkedlist_t *ptr);
 void updateFrequency(linkedlist_t *ptr);
 
-int main(int argc, char const *argv[]) {
+/*int main(int argc, char const *argv[]) {
   linkedlist_t *list = malloc(sizeof(linkedlist_t));
   initLinked(list);
-  insertAlphabetically(list, "zebra");
-  insertAlphabetically(list, "apple");
-  insertAlphabetically(list, "dog");
-  insertAlphabetically(list, "cat");
-  insertAlphabetically(list, "dandellion");
+  insertAlphabetically(list->head, "zebra");
+  insertAlphabetically(list->head, "apple");
+  insertAlphabetically(list->head, "dog");
+  insertAlphabetically(list->head, "cat");
+  insertAlphabetically(list->head, "dandellion");
   displayLinked(list->head);
   return 0;
-}
+}*/
 
 void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->word = NULL;
@@ -40,38 +40,34 @@ void initLinked(linkedlist_t *ll){ //initizialing a linked list
 }
 
 linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
-    linkedlist_t *current = ll;
+    linkedlist_t *current = ll->head;
     //check here
     linkedlist_t *prev = NULL;
     if (ll->word != NULL) {
         int isHead = 1;
         while (current->word != NULL) {
-            if(strcmp(current->word, word)==0){
+            if(strcmp(current->word, word)==0){ //update occurences
               current->occurences++;
               return ll->head;
             }
-            if (strcmp(current->word, word)>0){
-                linkedlist_t *new = malloc(sizeof(linkedlist_t));
-                initLinked(new);
-                char *tmpData = malloc(strlen(word)+1);
-                strcpy(tmpData, word);
-                new->word=tmpData;
-                new->next = current;
-                if(isHead==1){
+            //create new node
+            linkedlist_t *new = malloc(sizeof(linkedlist_t));
+            initLinked(new);
+            char *tmpData = malloc(strlen(word)+1);
+            strcpy(tmpData, word);
+            new->word=tmpData;
+            if (strcmp(current->word, word)>0){ //insert alphabetically
+                if(isHead==1){ //insert in front
+                  new->next = ll->head;
                   ll->head = new;
                 }
-                //check here
-                if (prev != NULL) {
-                    prev->next = new;
+                else{
+                  new->next=current;
+                  prev->next=new;
                 }
                 return ll->head;
             }
-            if(current->next==NULL){
-              linkedlist_t *new = malloc(sizeof(linkedlist_t));
-              initLinked(new);
-              char *tmpData = malloc(strlen(word)+1);
-              strcpy(tmpData, word);
-              new->word=tmpData;
+            if(current->next==NULL){ //insert at the end
               current->next = new;
               return ll->head;
             }
@@ -88,6 +84,7 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
       ll->word=tmpData;
       return ll->head;
     }
+    return ll->head;
 }
 
 void displayLinked(linkedlist_t *ptr) {
