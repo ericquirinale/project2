@@ -20,7 +20,6 @@ void initJSD(jsdlist_t *list){ //initizialing a linked list
     list->combinedCount = 0;
     list->jsd = 0.0;
     list->next = NULL;
-    printf("%s\n", "hi");
 }
 
 jsdlist_t *insertJsd(jsdlist_t *head, char* fpath1, char* fpath2, int count1, int count2, double jsd) { //returns pointer to head of list

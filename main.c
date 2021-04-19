@@ -170,12 +170,7 @@ void *directoryQueue(){
   char *dirName;
   char bSlash = '/';
   while(dirQ.count>0){ //while directorys to dequeue
-    printf("%s", "display: ");
-    display(dirQ.head);
     dirName = dequeue(&dirQ);
-    /*if(!dirName){
-      break;
-    }*/
     char *filePath = malloc(strlen(dirName)+2);
     strcpy(filePath, dirName);
     strcpy(filePath, "/");
@@ -186,17 +181,13 @@ void *directoryQueue(){
       if (stat(filePath, &arg)==0){
         if(S_ISREG(arg.st_mode)) { //if is file
           if(strcmp(dent->d_name+strlen(dent->d_name)-strlen(fileSuffix), fileSuffix) == 0){ //if correct suffix
-            printf("%s\n%s\n", "Enqueued file: ", dent->d_name);
             enqueue(&fileQ, filePath); //add to file queue
           }
         }
         else if(S_ISDIR(arg.st_mode)) { //if is directory
           if(dent->d_name[0] != '.'){
             strncat(filePath, &bSlash, 1);
-            printf("%s\n%s\n","Enqueued directory: ", filePath);
             enqueue(&dirQ, filePath); //add to directory queue
-            printf("%s", "display2: ");
-            display(dirQ.head);
           }
         }
       }
@@ -209,9 +200,11 @@ void *directoryQueue(){
 }
 
 void *fileQueue(){
+    display(fileQ.head);
     char *fileName;
     while(fileQ.count>0){ //while files to dequeue
       fileName = dequeue(&fileQ);
+      //printf("%s\n", fileName);
       FILE *fp = fopen(fileName, "r");
       linkedlist_t wfrequency;
       initLinked(&wfrequency);
