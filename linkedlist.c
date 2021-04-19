@@ -19,7 +19,7 @@ int listCount(linkedlist_t *ptr);
 void updateFrequency(linkedlist_t *ptr);
 
 int main(int argc, char const *argv[]) {
-  linkedlist_t *list;
+  linkedlist_t *list = malloc(sizeof(linkedlist_t));
   initLinked(list);
   insertAlphabetically(list, "apple");
   insertAlphabetically(list, "dog");
@@ -29,6 +29,7 @@ int main(int argc, char const *argv[]) {
   displayLinked(list);
   return 0;
 }
+
 void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->word = NULL;
     ll->occurences = 1;
