@@ -252,11 +252,11 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
   double kld1;
   double kld2;
 
-  while(wfd1->next!=NULL){
+  while(tmp1->next!=NULL){ //create meanF
     insertAlphabetically(meanF, wfd1->word);
   }
 
-  while(tmp2->next!=NULL){
+  while(tmp2->next!=NULL){ //create meanF
     if(strcmp(tmp1->word, tmp2->word)==0){ //if the words are equal add occurences
       meanF->occurences = tmp1->occurences + tmp2->occurences;
       tmp1 = tmp1->next;
@@ -273,10 +273,10 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
 
    updateFrequency(meanF);
 
-   while(head != NULL){
-     while(wfd1 != NULL){
+   while(head != NULL){//compute kld for file 1
+     while(tmp1 != NULL){
        if(strcmp(head->word, wfd1->word) == 0){
-         kld1 += (wfd1->occurences * logBase2(wfd1->occurences/head->occurences));
+         kld1 += (tmp1->occurences * logBase2(wfd1->occurences/head->occurences));
          wfd1 = wfd1->next;
          head = head->next;
        }
@@ -291,7 +291,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
 
    head = meanF;
 
-   while(head != NULL){
+   while(head != NULL){ //compute kld for file 2
      while(wfd2 != NULL){
        if(strcmp(head->word, wfd2->word) == 0){
          kld2 += (wfd2->occurences * logBase2(wfd2->occurences/head->occurences));
