@@ -17,7 +17,7 @@ void collectionPhase();
 void *directoryQueue();
 void *fileQueue();
 void analysisPhase(wfdrepo_t *repo);
-linkedlist_t WFD(FILE* f);
+linkedlist_t *WFD(FILE* f);
 double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2);
 double logBase2(double x);
 
@@ -205,10 +205,10 @@ void *fileQueue(){
       fileName = dequeue(&fileQ);
       //printf("%s\n", fileName);
       FILE *fp = fopen(fileName, "r");
-      linkedlist_t wfrequency;
-      initLinked(&wfrequency);
+      linkedlist_t *wfrequency;
+      initLinked(wfrequency);
       wfrequency = WFD(fp);
-      insertRepo(&wfdRepo, fileName, &wfrequency);
+      insertRepo(&wfdRepo, fileName, wfrequency);
     }
     printf("%s\n", "Display wfd repo: ");
     displayWFD(&wfdRepo);
@@ -216,12 +216,12 @@ void *fileQueue(){
 }
 
 //need to create WFD Data Structure, WFD Repo
-linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
+linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   char buf[1000];
   char tmp[1000];
   int tmpCount = 0;
-  linkedlist_t wfd;
-  initLinked(&wfd);
+  linkedlist_t *wfd;
+  initLinked(wfd);
 
   while(fscanf(f, "%s", buf) == 1){ //checking each individual word
       for (size_t i = 0; i < strlen(buf); i++) {
@@ -231,11 +231,11 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      insertAlphabetically(&wfd, tmp);
+      insertAlphabetically(wfd, tmp);
       memset(buf, 0, sizeof(buf));
       memset(tmp, 0, sizeof(tmp));
     }
-    updateFrequency(&wfd);
+    updateFrequency(wfd);
     //displayLinked(&wfd);
     return wfd;
   }
