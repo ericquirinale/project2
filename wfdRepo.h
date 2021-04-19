@@ -10,5 +10,6 @@ typedef struct wfdrepo_t{
 
 wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd);
 void initRepo(wfdrepo_t *repo);
+int repoSize(wfdrepo_t *repo);
 
 #endif

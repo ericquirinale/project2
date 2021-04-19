@@ -10,10 +10,12 @@
 #include "queue.h"
 #include "linkedList.h"
 #include "wfdRepo.h"
+#include "jsdList.h"
 
 void collectionPhase();
 void *directoryQueue();
 void *fileQueue();
+void analysisPhase(wfdrepo_t *repo);
 linkedlist_t WFD(FILE* f);
 
 //global variables
@@ -120,6 +122,8 @@ void collectionPhase(){
   }
 
   directoryQueue();
+  fileQueue();
+  analysisPhase(&wfdRepo);
 
   //sleep(1);
 
@@ -135,8 +139,34 @@ void collectionPhase(){
     pthread_join(fThreads[l], &retval);
   }*/
 
-
 }
+
+void analysisPhase(wfdrepo_t *repo){
+/*create analysis threads
+-for each pair of files in repo
+	-call JSD()
+	-add JSD to array
+  \
+
+//kill threads
+//Sort array using qsort()*/
+wfdrepo_t *tmp = repo->next;
+int size = repoSize(repo);
+jsdlist_t *jsdArray;
+double jsd;
+initJSD(jsdArray);
+while (repo->next!=NULL) {
+  while (tmp!=NULL) {
+    jsd = JSD(repo->wfd, tmp->wfd);
+    insertJsd(jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
+    tmp = tmp->next;
+  }
+  repo = repo->next;
+  tmp = repo->next;
+}
+displayJSD(jsdArray);
+}
+
 
 void *directoryQueue(){
   DIR *dir;
@@ -215,8 +245,3 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
     updateFrequency(&wfd);
     return wfd;
   }
-
-
-/*int JSD(linkedlist_t wfd1, linkedlist_t wfd2){
-  linkedlist_t meanF; //mean frequency linkedlist
-}*/

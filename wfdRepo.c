@@ -14,6 +14,7 @@ typedef struct wfdrepo_t{
 
 void initRepo(wfdrepo_t *repo);
 wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd);
+int repoSize(wfdrepo_t *repo);
 
 wfdrepo_t *insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd) { //returns pointer to head of list
   wfdrepo_t *current = head;
@@ -45,4 +46,13 @@ void initRepo(wfdrepo_t *repo){
   repo->numTokens=0;
   repo->wfd = NULL;
   repo->next=NULL;
+}
+
+int repoSize(wfdrepo_t *repo){
+  int size = 1;
+  while (repo->next!=NULL) {
+    size++;
+    repo = repo->next;
+  }
+  return size;
 }
