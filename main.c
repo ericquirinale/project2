@@ -200,7 +200,6 @@ void *directoryQueue(){
 }
 
 void *fileQueue(){
-    display(fileQ.head);
     char *fileName;
     while(fileQ.count>0){ //while files to dequeue
       fileName = dequeue(&fileQ);
@@ -231,6 +230,7 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
       insertAlphabetically(&wfd, word);
     }
     updateFrequency(&wfd);
+    displayLinked(&wfd);
     return wfd;
   }
 
