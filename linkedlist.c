@@ -36,11 +36,11 @@ void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->occurences = 1;
     ll->frequency = 0.0;
     ll->next = NULL;
-    ll->head = ll;
+    ll->head->next = ll;
 }
 
 linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
-    linkedlist_t *current = ll->head;
+    linkedlist_t *current = ll->head->next;
     //check here
     linkedlist_t *prev = NULL;
     if (ll->word != NULL) {
@@ -59,7 +59,7 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
             if (strcmp(current->word, word)>0){ //insert alphabetically
                 if(isHead==1){ //insert in front
                   new->next = ll->head;
-                  ll->head = new;
+                  ll->head->next = new;
                 }
                 else{
                   new->next=current;
@@ -68,6 +68,7 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
                 return ll->head;
             }
             if(current->next==NULL){ //insert at the end
+
               current->next = new;
               return ll->head;
             }
