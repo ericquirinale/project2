@@ -208,6 +208,8 @@ void *fileQueue(){
       linkedlist_t wfrequency;
       initLinked(&wfrequency);
       wfrequency = WFD(fp);
+      printf("%s\n","DISPLAY: " );
+      displayLinked(&wfrequency);
       insertRepo(&wfdRepo, fileName, &wfrequency);
     }
     return 0;
