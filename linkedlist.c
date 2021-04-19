@@ -18,7 +18,7 @@ void displayLinked(linkedlist_t *ptr);
 int listCount(linkedlist_t *ptr);
 void updateFrequency(linkedlist_t *ptr);
 
-int main(int argc, char const *argv[]) {
+/*int main(int argc, char const *argv[]) {
   linkedlist_t *list = malloc(sizeof(linkedlist_t));
   initLinked(list);
   insertAlphabetically(list, "apple");
@@ -28,7 +28,7 @@ int main(int argc, char const *argv[]) {
   insertAlphabetically(list, "dandellion");
   displayLinked(list);
   return 0;
-}
+}*/
 
 void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->word = NULL;
@@ -52,7 +52,7 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
                 initLinked(new);
                 char *tmpData = malloc(strlen(word)+1);
                 strcpy(tmpData, word);
-                ll->word=tmpData;
+                new->word=tmpData;
                 new->next = current;
                 //check here
                 if (prev != NULL) {
@@ -65,7 +65,7 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
               initLinked(new);
               char *tmpData = malloc(strlen(word)+1);
               strcpy(tmpData, word);
-              ll->word=tmpData;
+              new->word=tmpData;
               current->next = new;
               return;
             }

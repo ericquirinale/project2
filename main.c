@@ -210,8 +210,6 @@ void *fileQueue(){
       wfrequency = WFD(fp);
       insertRepo(&wfdRepo, fileName, &wfrequency);
     }
-    printf("%s\n", "Display wfd repo: ");
-    displayWFD(&wfdRepo);
     return 0;
 }
 
@@ -236,8 +234,6 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
       memset(word, 0, sizeof(word));
     }
     updateFrequency(&wfd);
-    printf("%s\n", "displaying");
-    displayLinked(&wfd);
     return wfd;
   }
 
