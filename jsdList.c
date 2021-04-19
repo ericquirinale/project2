@@ -10,6 +10,7 @@ typedef struct jsdlist_t{
     int combinedCount;
     double jsd;
     struct jsdlist_t *next;
+    struct jsdlist_t *head;
 
 } jsdlist_t;
 

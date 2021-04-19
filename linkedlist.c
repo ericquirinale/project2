@@ -9,11 +9,12 @@ typedef struct linkedlist_t{
     int occurences;
     double frequency;
     struct linkedlist_t *next;
+    struct linkedlist_t *head;
 
 } linkedlist_t;
 
 void initLinked(linkedlist_t *ll);
-void insertAlphabetically(linkedlist_t *ll, char *word);
+linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word);
 void displayLinked(linkedlist_t *ptr);
 int listCount(linkedlist_t *ptr);
 void updateFrequency(linkedlist_t *ptr);
@@ -35,30 +36,35 @@ void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->occurences = 1;
     ll->frequency = 0.0;
     ll->next = NULL;
+    ll->head = ll;
 }
 
-void insertAlphabetically(linkedlist_t *ll, char *word) {
+linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
     linkedlist_t *current = ll;
     //check here
     linkedlist_t *prev = NULL;
     if (ll->word != NULL) {
+        int isHead = 1;
         while (current->word != NULL) {
             if(strcmp(current->word, word)==0){
               current->occurences++;
-              return;
+              return ll->head;
             }
-            if (strcmp(current->word, word)>0) {
+            if (strcmp(current->word, word)>0){
                 linkedlist_t *new = malloc(sizeof(linkedlist_t));
                 initLinked(new);
                 char *tmpData = malloc(strlen(word)+1);
                 strcpy(tmpData, word);
                 new->word=tmpData;
                 new->next = current;
+                if(isHead==1){
+                  ll->head = new;
+                }
                 //check here
                 if (prev != NULL) {
                     prev->next = new;
                 }
-                return;
+                return ll->head;
             }
             if(current->next==NULL){
               linkedlist_t *new = malloc(sizeof(linkedlist_t));
@@ -67,17 +73,20 @@ void insertAlphabetically(linkedlist_t *ll, char *word) {
               strcpy(tmpData, word);
               new->word=tmpData;
               current->next = new;
-              return;
+              return ll->head;
             }
             //check here
             prev = current;
             current = current->next;
+            isHead=0;
         }
+
     }
     else{
       char *tmpData = malloc(strlen(word)+1);
       strcpy(tmpData, word);
       ll->word=tmpData;
+      return ll->head;
     }
 }
 
