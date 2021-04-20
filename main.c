@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "queue.h"
-#include "linkedList.h"
+#include "linkedlist.h"
 #include "wfdRepo.h"
 #include "jsdList.h"
 
@@ -162,7 +162,7 @@ while (repo->next!=NULL) {
   repo = repo->next;
   tmp = repo->next;
 }
-//displayJSD(&jsdArray);
+displayJSD(&jsdArray);
 }
 
 
@@ -248,12 +248,6 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
 
  linkedlist_t *tmp1 = wfd1;
  linkedlist_t *tmp2 = wfd2;
-
-  printf("%s\n", "first file: ");
-  displayLinked(wfd1);
-
-  printf("%s\n", "second file: ");
-  displayLinked(wfd2);
   double jsd;
   double kld1;
   double kld2;
@@ -263,17 +257,12 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
     tmp1 = tmp1->next;
   }
   head = insertAlphabetically(head, tmp1->word);
-  printf("%s\n", "head1: ");
-  displayLinked(head);
   tmp1 = wfd1; //reset temp
   while(tmp2->next!=NULL){ //create head
     head = insertAlphabetically(head, tmp2->word);
     tmp2 = tmp2->next;
   }
   head = insertAlphabetically(head, tmp2->word);
-
-   printf("%s\n", "head2: ");
-   displayLinked(head);
 
    updateFrequency(head);
 
@@ -284,8 +273,12 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
    while(tmp1->word != NULL){
      if(strcmp(head->word, tmp1->word) == 0){ //the found the right word
        kld1 += (tmp1->occurences * logBase2(tmp1->occurences/head->occurences));
+       if (tmp1->next==NULL) {
+         break;
+       }
        tmp1 = tmp1->next;
        head = head->next;
+
      }
      else{
        head = head->next;
@@ -298,6 +291,9 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
    while(tmp2->word != NULL){
      if(strcmp(head->word, tmp2->word) == 0){
        kld2 += (tmp2->occurences * logBase2(tmp2->occurences/head->occurences));
+       if (tmp1->next==NULL) {
+         break;
+       }
        tmp2 = tmp2->next;
        head = head->next;
      }
