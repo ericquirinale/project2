@@ -220,6 +220,8 @@ void *fileQueue(){
 linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   char buf[1000];
   char word[1000];
+  memset(buf, 0, sizeof(buf));
+  memset(word, 0, sizeof(word));
   char *wordPtr = word;
   int tmpCount = 0;
   linkedlist_t *head = malloc(sizeof(linkedlist_t));
@@ -243,11 +245,11 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   }
 
  double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
- linkedlist_t *head = malloc(sizeof(linkedlist_t));
- initLinked(head); //mean frequency linkedlist
+  linkedlist_t *head = malloc(sizeof(linkedlist_t));
+  initLinked(head); //mean frequency linkedlist
 
- linkedlist_t *tmp1 = wfd1;
- linkedlist_t *tmp2 = wfd2;
+  linkedlist_t *tmp1 = wfd1;
+  linkedlist_t *tmp2 = wfd2;
   double jsd = 0.0;
   double kld1 = 0.0;
   double kld2 = 0.0;
