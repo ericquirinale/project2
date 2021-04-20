@@ -44,6 +44,8 @@ void insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd) { //returns poi
 void displayWFD(wfdrepo_t *ptr) {
     for (; ptr != NULL; ptr = ptr->next) {
         printf("%s\t%d\n", ptr->fName, ptr->numTokens);
+        displayLinked(ptr->wfd);
+        //printf("%s\t%d\n", ptr->fName, ptr->numTokens);
     }
 }
 

@@ -204,18 +204,22 @@ void *directoryQueue(){
 
 void *fileQueue(){
     char *fileName;
+    linkedlist_t wfrequency;
+    initLinked(&wfrequency);
+    linkedlist_t *wptr = &wfrequency;
     while(fileQ.count>0){ //while files to dequeue
       fileName = dequeue(&fileQ);
       //printf("%s\n", fileName);
       FILE *fp = fopen(fileName, "r");
-      linkedlist_t wfrequency;
-      initLinked(&wfrequency);
-      linkedlist_t *wptr;
       wptr = WFD(fp);
-      printf("%s\n", "wptr");
+      printf("%s\n", "WPTR: ");
       displayLinked(wptr);
+      printf("%s\n", "CHANGED?");
+      displayWFD(&wfdRepo);
       insertRepo(&wfdRepo, fileName, wptr);
     }
+    printf("%s\n", "displayWFD: ");
+    displayWFD(&wfdRepo);
     return 0;
 }
 
@@ -243,6 +247,8 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
       memset(word, 0, sizeof(word));
     }
     updateFrequency(head);
+    printf("%s\n", "HEAD: ");
+    displayLinked(head);
     return head;
   }
 
