@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
-#include "linkedlist.h"
+#include "linkedList.h"
 
 typedef struct wfdrepo_t{
     char *fName;

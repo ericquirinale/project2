@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "queue.h"
-#include "linkedlist.h"
+#include "linkedList.h"
 #include "wfdRepo.h"
 #include "jsdList.h"
 
@@ -162,7 +162,7 @@ while (repo->next!=NULL) {
   repo = repo->next;
   tmp = repo->next;
 }
-displayJSD(&jsdArray);
+//displayJSD(&jsdArray);
 }
 
 
@@ -212,8 +212,6 @@ void *fileQueue(){
       initLinked(&wfrequency);
       linkedlist_t *wptr;
       wptr = WFD(fp);
-      printf("%s\n","DISPLAY: " );
-      displayLinked(wptr);
       insertRepo(&wfdRepo, fileName, wptr);
     }
     return 0;
@@ -261,7 +259,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
     head = insertAlphabetically(head, wfd1->word);
     tmp1 = tmp1->next;
   }
-  displayLinked(&meanF);
+  displayLinked(head);
   tmp1 = wfd1; //reset temp
   while(tmp2->next!=NULL){ //create meanF
     if(strcmp(tmp1->word, tmp2->word)==0){ //if the words are equal add occurences
