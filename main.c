@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "queue.h"
-#include "linkedlist.h"
+#include "linkedList.h"
 #include "wfdRepo.h"
 #include "jsdList.h"
 
