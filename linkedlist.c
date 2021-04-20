@@ -80,6 +80,7 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word, int occurences)
       char *tmpData = malloc(strlen(word)+1);
       strcpy(tmpData, word);
       ll->word=tmpData;
+      ll->occurences=occurences;
       return ll;
     }
     return ll;
