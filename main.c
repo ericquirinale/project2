@@ -258,9 +258,10 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
   double kld2;
 
   while(tmp1->next!=NULL){ //create meanF
-    insertAlphabetically(&meanF, wfd1->word);
+    head = insertAlphabetically(head, wfd1->word);
     tmp1 = tmp1->next;
   }
+  displayLinked(&meanF);
   tmp1 = wfd1; //reset temp
   while(tmp2->next!=NULL){ //create meanF
     if(strcmp(tmp1->word, tmp2->word)==0){ //if the words are equal add occurences
@@ -269,7 +270,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
       tmp2 = tmp2->next;
     }
     else if(strcmp(tmp1->word, tmp2->word)>0){
-      insertAlphabetically(&meanF, tmp2->word);
+      head = insertAlphabetically(head, tmp2->word);
       tmp2 = tmp2->next;
     }
     else{
@@ -277,11 +278,12 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
     }
   }
 
-   displayLinked(&meanF);
-   updateFrequency(&meanF);
+   displayLinked(head);
+   updateFrequency(head);
 
    tmp1 = wfd1;
    tmp2 = wfd2;
+   linkedlist_t *headTmp = head;
 
    while(head->word != NULL){//compute kld for file 1
      while(tmp1->word != NULL){
@@ -299,7 +301,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
      }
    }
 
-   head = &meanF;
+   head = headTmp;
 
    while(head->word != NULL){ //
      while(tmp2->word != NULL){
