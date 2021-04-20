@@ -272,7 +272,7 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
 
    while(tmp1->word != NULL){
      if(strcmp(head->word, tmp1->word) == 0){ //the found the right word
-       kld1 += (tmp1->occurences * logBase2(tmp1->occurences/head->occurences));
+       kld1 += (tmp1->frequency * logBase2(tmp1->frequency/head->frequency));
        if (tmp1->next==NULL) {
          break;
        }
@@ -290,7 +290,7 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
 
    while(tmp2->word != NULL){
      if(strcmp(head->word, tmp2->word) == 0){
-       kld2 += (tmp2->occurences * logBase2(tmp2->occurences/head->occurences));
+       kld2 += (tmp2->frequency * logBase2(tmp2->frequency/head->frequency));
        if (tmp1->next==NULL) {
          break;
        }
