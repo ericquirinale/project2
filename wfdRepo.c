@@ -19,8 +19,7 @@ void displayWFD(wfdrepo_t *ptr);
 
 void insertRepo(wfdrepo_t *head, char* fName, linkedlist_t* wfd) { //returns pointer to head of list
   wfdrepo_t *current = head;
-  linkedlist_t *tmpWFD = malloc(sizeof(linkedlist_t));
-  tmpWFD = wfd;
+  linkedlist_t *tmpWFD = wfd;
   char *tmpfName = malloc(strlen(fName)+1);
   strcpy(tmpfName, fName);
   if (current->fName!=NULL) {
