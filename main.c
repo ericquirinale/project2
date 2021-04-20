@@ -281,37 +281,28 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
    tmp2 = wfd2;
    linkedlist_t *headTmp = head;
 
-   while(head->word != NULL){//compute kld for file 1
-     while(tmp1->word != NULL){
-       if(strcmp(head->word, tmp1->word) == 0){
-         kld1 += (tmp1->occurences * logBase2(tmp1->occurences/head->occurences));
-         tmp1 = tmp1->next;
-         head = head->next;
-       }
-       else if (strcmp(head->word, tmp1->word)>0) {
-         tmp1 = tmp1->next;
-       }
-       else{
-         head = head->next;
-       }
+   while(tmp1->word != NULL){
+     if(strcmp(head->word, tmp1->word) == 0){ //the found the right word
+       kld1 += (tmp1->occurences * logBase2(tmp1->occurences/head->occurences));
+       tmp1 = tmp1->next;
+       head = head->next;
+     }
+     else{
+       head = head->next;
      }
    }
 
+
    head = headTmp;
 
-   while(head->word != NULL){ //
-     while(tmp2->word != NULL){
-       if(strcmp(head->word, tmp2->word) == 0){
-         kld2 += (tmp2->occurences * logBase2(tmp2->occurences/head->occurences));
-         tmp2 = tmp2->next;
-         head = head->next;
-       }
-       else if (strcmp(head->word, tmp2->word)>0) {
-         tmp2 = tmp2->next;
-       }
-       else{
-         head = head->next;
-       }
+   while(tmp2->word != NULL){
+     if(strcmp(head->word, tmp2->word) == 0){
+       kld2 += (tmp2->occurences * logBase2(tmp2->occurences/head->occurences));
+       tmp2 = tmp2->next;
+       head = head->next;
+     }
+     else{
+       head = head->next;
      }
    }
 
