@@ -231,8 +231,8 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      wfd = *insertAlphabetically(&wfd, word);
-      displayLinked(&wfd);
+      linkedlist_t *head = insertAlphabetically(&wfd, word);
+      displayLinked(head);
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
     }
