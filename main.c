@@ -264,6 +264,8 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   }
   head = insertAlphabetically(head, tmp2->word);
 
+  printf("%s\n", "MEANF: ");
+
    updateFrequency(head);
 
    tmp1 = wfd1;
