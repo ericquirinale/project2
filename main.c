@@ -221,6 +221,7 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
   char word[1000];
   int tmpCount = 0;
   linkedlist_t wfd;
+  linkedlist_t *head;
   initLinked(&wfd);
 
   while(fscanf(f, "%s", buf) == 1){ //checking each individual word
@@ -231,11 +232,12 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      linkedlist_t *head = insertAlphabetically(&wfd, word);
-      displayLinked(head);
+      head = insertAlphabetically(&wfd, word);
+
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
     }
+    displayLinked(head);
     updateFrequency(&wfd);
     return wfd;
   }
