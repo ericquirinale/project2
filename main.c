@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "queue.h"
-#include "linkedList.h"
+#include "linkedlist.h"
 #include "wfdRepo.h"
 #include "jsdList.h"
 
@@ -221,7 +221,7 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
   char word[1000];
   int tmpCount = 0;
   linkedlist_t wfd;
-  linkedlist_t *head;
+  linkedlist_t *head = &wfd;
   initLinked(&wfd);
 
   while(fscanf(f, "%s", buf) == 1){ //checking each individual word
@@ -232,13 +232,13 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      head = insertAlphabetically(&wfd, word);
+      head = insertAlphabetically(head, word);
 
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
     }
     displayLinked(head);
-    updateFrequency(&wfd);
+    updateFrequency(head);
     return wfd;
   }
 
