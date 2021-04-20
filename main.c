@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "queue.h"
-#include "linkedList.h"
+#include "linkedlist.h"
 #include "wfdRepo.h"
 #include "jsdList.h"
 
@@ -212,6 +212,8 @@ void *fileQueue(){
       initLinked(&wfrequency);
       linkedlist_t *wptr;
       wptr = WFD(fp);
+      printf("%s\n", "wptr");
+      displayLinked(wptr);
       insertRepo(&wfdRepo, fileName, wptr);
     }
     return 0;
@@ -221,6 +223,7 @@ void *fileQueue(){
 linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   char buf[1000];
   char word[1000];
+  char *wordPtr = word;
   int tmpCount = 0;
   linkedlist_t wfd;
   linkedlist_t *head = &wfd;
@@ -234,7 +237,7 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      head = insertAlphabetically(head, word);
+      head = insertAlphabetically(head, wordPtr);
 
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
