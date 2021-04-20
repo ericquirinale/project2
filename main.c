@@ -150,19 +150,19 @@ if (tmp==NULL) {
   perror("Only one file found");
 }
 int size = repoSize(repo);
-jsdlist_t jsdArray;
+jsdlist_t *jsdArray = malloc(sizeof(jsdlist_t));
 double jsd;
-initJSD(&jsdArray);
+initJSD(jsdArray);
 while (repo->next!=NULL) {
   while (tmp!=NULL) {
     jsd = JSD(repo->wfd, tmp->wfd);
-    insertJsd(&jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
+    jsdArray = insertJsd(jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
     tmp = tmp->next;
   }
   repo = repo->next;
   tmp = repo->next;
 }
-displayJSD(&jsdArray);
+displayJSD(jsdArray);
 }
 
 
@@ -248,9 +248,9 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
 
  linkedlist_t *tmp1 = wfd1;
  linkedlist_t *tmp2 = wfd2;
-  double jsd;
-  double kld1;
-  double kld2;
+  double jsd = 0.0;
+  double kld1 = 0.0;
+  double kld2 = 0.0;
 
   while(tmp1->next!=NULL){ //create head
     head = insertAlphabetically(head, tmp1->word);

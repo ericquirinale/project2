@@ -102,6 +102,6 @@ int listCount(linkedlist_t *ptr) {
 void updateFrequency(linkedlist_t *ptr) {
     int count = listCount(ptr);
     for (; ptr != NULL; ptr = ptr->next) {
-        ptr->frequency = (ptr->occurences/count);
+        ptr->frequency = ((double)ptr->occurences/count);
     }
 }

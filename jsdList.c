@@ -40,7 +40,7 @@ jsdlist_t *insertJsd(jsdlist_t *list, char* fpath1, char* fpath2, int count1, in
     new->jsd=jsd;
     int isHead = 1;
     while(current!=NULL){ //insert in decreasing order pf combinedCount
-      if (current->combinedCount > new->combinedCount) {
+      if (current->combinedCount < new->combinedCount) {
         if(isHead==1){ //insert in front
           new->next = list->head;
           list->head = new;
