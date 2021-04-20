@@ -17,7 +17,7 @@ void collectionPhase();
 void *directoryQueue();
 void *fileQueue();
 void analysisPhase(wfdrepo_t *repo);
-linkedlist_t WFD(FILE* f);
+linkedlist_t *WFD(FILE* f);
 double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2);
 double logBase2(double x);
 
@@ -207,16 +207,17 @@ void *fileQueue(){
       FILE *fp = fopen(fileName, "r");
       linkedlist_t wfrequency;
       initLinked(&wfrequency);
-      wfrequency = WFD(fp);
+      linkedlist_t *wptr;
+      wptr = WFD(fp);
       printf("%s\n","DISPLAY: " );
-      displayLinked(&wfrequency);
-      insertRepo(&wfdRepo, fileName, &wfrequency);
+      displayLinked(wptr);
+      insertRepo(&wfdRepo, fileName, wptr);
     }
     return 0;
 }
 
 //need to create WFD Data Structure, WFD Repo
-linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
+linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   char buf[1000];
   char word[1000];
   int tmpCount = 0;
@@ -239,7 +240,7 @@ linkedlist_t WFD(FILE* f){// returns a Linked List for the WFD
     }
     displayLinked(head);
     updateFrequency(head);
-    return wfd;
+    return head;
   }
 
 double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
