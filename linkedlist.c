@@ -13,7 +13,7 @@ typedef struct linkedlist_t{
 } linkedlist_t;
 
 void initLinked(linkedlist_t *ll);
-linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word);
+linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word, int occurences);
 void displayLinked(linkedlist_t *ptr);
 int listCount(linkedlist_t *ptr);
 void updateFrequency(linkedlist_t *ptr);
@@ -37,7 +37,7 @@ void initLinked(linkedlist_t *ll){ //initizialing a linked list
     ll->next = NULL;
 }
 
-linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
+linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word, int occurences) {
     //check here
     linkedlist_t *current = ll;
     linkedlist_t *prev = NULL;
@@ -45,7 +45,7 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
         int isHead = 1;
         while (current->word != NULL) {
             if(strcmp(current->word, word)==0){ //update occurences
-              current->occurences++;
+              current->occurences+=occurences;
               return ll;
             }
             //create new node
