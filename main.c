@@ -146,6 +146,9 @@ void collectionPhase(){
 
 void analysisPhase(wfdrepo_t *repo){
 wfdrepo_t *tmp = repo->next;
+if (tmp==NULL) {
+  perror("Only one file found");
+}
 int size = repoSize(repo);
 jsdlist_t jsdArray;
 double jsd;
@@ -238,15 +241,14 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
     }
-    displayLinked(head);
     updateFrequency(head);
     return head;
   }
 
 double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
- linkedlist_t *meanF;
- linkedlist_t *head = meanF;
- initLinked(meanF); //mean frequency linkedlist
+ linkedlist_t meanF;
+ linkedlist_t *head = &meanF;
+ initLinked(&meanF); //mean frequency linkedlist
 
  linkedlist_t *tmp1 = wfd1;
  linkedlist_t *tmp2 = wfd2;
@@ -256,17 +258,17 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
   double kld2;
 
   while(tmp1->next!=NULL){ //create meanF
-    insertAlphabetically(meanF, wfd1->word);
+    insertAlphabetically(&meanF, wfd1->word);
   }
 
   while(tmp2->next!=NULL){ //create meanF
     if(strcmp(tmp1->word, tmp2->word)==0){ //if the words are equal add occurences
-      meanF->occurences = tmp1->occurences + tmp2->occurences;
+      meanF.occurences = tmp1->occurences + tmp2->occurences;
       tmp1 = tmp1->next;
       tmp2 = tmp2->next;
     }
     else if(strcmp(tmp1->word, tmp2->word)>0){
-      insertAlphabetically(meanF, tmp2->word);
+      insertAlphabetically(&meanF, tmp2->word);
       tmp2 = tmp2->next;
     }
     else{
@@ -274,7 +276,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
     }
   }
 
-   updateFrequency(meanF);
+   updateFrequency(&meanF);
 
    while(head != NULL){//compute kld for file 1
      while(tmp1 != NULL){
@@ -283,7 +285,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
          wfd1 = wfd1->next;
          head = head->next;
        }
-       else if (strcmp(meanF->word, wfd1->word)>0) {
+       else if (strcmp(meanF.word, wfd1->word)>0) {
          wfd1 = wfd1->next;
        }
        else{
@@ -292,7 +294,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
      }
    }
 
-   head = meanF;
+   head = &meanF;
 
    while(head != NULL){ //
      while(wfd2 != NULL){
@@ -301,7 +303,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
          wfd2 = wfd2->next;
          head = head->next;
        }
-       else if (strcmp(meanF->word, wfd1->word)>0) {
+       else if (strcmp(meanF.word, wfd1->word)>0) {
          wfd2 = wfd2->next;
        }
        else{
