@@ -235,7 +235,7 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
         }
       }
       tmpCount = 0;
-      head = insertAlphabetically(head, wordPtr, 1);
+      head = insertAlphabetically(head, wordPtr);
 
       memset(buf, 0, sizeof(buf));
       memset(word, 0, sizeof(word));
@@ -255,16 +255,24 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   double kld2 = 0.0;
 
   while(tmp1->next!=NULL){ //create head
-    head = insertAlphabetically(head, tmp1->word, tmp1->occurences);
+    for (size_t i = 0; i < tmp1->occurences; i++) {
+      head = insertAlphabetically(head, tmp1->word);
+    }
     tmp1 = tmp1->next;
   }
-  head = insertAlphabetically(head, tmp1->word, tmp1->occurences);
+  for (size_t i = 0; i < tmp1->occurences; i++) {
+    head = insertAlphabetically(head, tmp1->word);
+  }
   tmp1 = wfd1; //reset temp
   while(tmp2->next!=NULL){ //create head
-    head = insertAlphabetically(head, tmp2->word, tmp2->occurences);
+    for (size_t i = 0; i < tmp2->occurences; i++) {
+      head = insertAlphabetically(head, tmp2->word);
+    }
     tmp2 = tmp2->next;
   }
-  head = insertAlphabetically(head, tmp2->word, tmp2->occurences);
+  for (size_t i = 0; i < tmp2->occurences; i++) {
+    head = insertAlphabetically(head, tmp2->word);
+  }
 
   printf("%s\n", "MEANF: ");
 
