@@ -103,6 +103,5 @@ void updateFrequency(linkedlist_t *ptr) {
     int count = listCount(ptr);
     for (; ptr != NULL; ptr = ptr->next) {
         ptr->frequency = ((double)ptr->occurences/count);
-        printf("%s\t%f\n", ptr->word, ptr->frequency);
     }
 }
