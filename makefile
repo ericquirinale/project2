@@ -1,2 +1,2 @@
-main: main.c queue.c linkedList.c wfdRepo.c
-	gcc -g main.c queue.c linkedlist.c wfdRepo.c jsdList.c -o main -lm
+main: main.c queue.c wfdList.c wfdRepo.c jsdList.c
+	gcc -w main.c queue.c wfdList.c wfdRepo.c jsdList.c -o main -lm

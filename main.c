@@ -9,7 +9,7 @@
 #include <ctype.h>
 #include <math.h>
 #include "queue.h"
-#include "linkedlist.h"
+#include "wfdList.h"
 #include "wfdRepo.h"
 #include "jsdList.h"
 
@@ -244,7 +244,7 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
     return head;
   }
 
-double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){ //computes 
+double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){ //computes
   linkedlist_t *head = malloc(sizeof(linkedlist_t));
   initLinked(head); //mean frequency linkedlist
 
