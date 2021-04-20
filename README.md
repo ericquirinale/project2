@@ -1,0 +1,3 @@
+# Eric Quirinale(eq30) & Ajay Parthasarathy(ap1703)
+
+For our project, we verified the accuracy of our code by running multiple test cases using both directories and actual files, both of which included a collection of words in both sentence and paragraph form, as well as repeated words and characters. If the code ran properly for both situations and we received the correct calculations for the JSD and KLD, for example, we concluded that it worked properly. However, this is only the case for the single thread aspect; we unfortunately couldn't get everything working properly for the multithreading aspect. We commented our multithreaded code as you can see.

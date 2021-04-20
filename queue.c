@@ -56,6 +56,23 @@ int destroy(queue_t *Q)
 // add item to end of queue
 // if the queue is full, block until space becomes available
 int enqueue(queue_t *Q, char *item){
+
+  node *tmp;
+  tmp = malloc(sizeof(node));
+  char *tmpData = malloc(strlen(item)+1);
+  strcpy(tmpData, item);
+  tmp->data = tmpData;
+  tmp->next = NULL;
+  if(Q->count>0){
+    Q->tail->next = tmp;
+    Q->tail = tmp;
+  }
+  else{
+    Q->head = Q->tail = tmp;
+  }
+
+  Q->count++;
+
 	//pthread_mutex_lock(&Q->lock);
 
 	/*
@@ -64,25 +81,7 @@ int enqueue(queue_t *Q, char *item){
 		return -1;
 	}*/
 
-
-	node *tmp;
-	tmp = malloc(sizeof(node));
-  char *tmpData = malloc(strlen(item)+1);
-  strcpy(tmpData, item);
-	tmp->data = tmpData;
-	tmp->next = NULL;
-	if(Q->count>0){
-		Q->tail->next = tmp;
-		Q->tail = tmp;
-	}
-	else{
-		Q->head = Q->tail = tmp;
-	}
-
-	Q->count++;
-
   //pthread_mutex_unlock(&Q->lock);
-
 
   // In case another thread is blocked in dequeue().
   //pthread_cond_signal(&Q->read_ready);
@@ -96,6 +95,22 @@ int enqueue(queue_t *Q, char *item){
 
 char *dequeue(queue_t *Q)
 {
+  char *rv;
+  if (Q->head) {
+     rv = Q->head->data;
+
+     Q->head = Q->head->next;
+     if (!Q->head)
+        Q->tail = NULL;
+
+     --Q->count;
+  } else {
+     // done() was called and queue is empty.
+     rv = NULL;
+  }
+
+  return rv;
+
   /*pthread_mutex_lock(&Q->lock);
 
   if(isempty(Q)){
@@ -114,35 +129,9 @@ char *dequeue(queue_t *Q)
   Q->activeThreads++;
 }*/
 
-   char *rv;
-   if (Q->head) {
-      rv = Q->head->data;
-
-      Q->head = Q->head->next;
-      if (!Q->head)
-         Q->tail = NULL;
-
-      --Q->count;
-   } else {
-      // done() was called and queue is empty.
-      rv = NULL;
-   }
-
-
-
    //pthread_mutex_unlock(&Q->lock);
-   return rv;
 /*  pthread_mutex_lock(&Q->lock);
-
-
-
-
-
-
-
   //pthread_mutex_lock(&Q->lock); //lock queue
-
-
   //printf("%s", "Dequeued: ");
   //display(Q->head);
   char *item = (char *) malloc(strlen(Q->head->data) + 1); //segault here
@@ -190,13 +179,3 @@ int qclose(queue_t *Q)
 
 	return 0;
 }
-
-/*void Queue_done(queue_t *Q) {
-   pthread_mutex_lock(&Q->lock);
-
-   Q->done = 1;
-
-   // In case another thread is blocked in dequeue().
-   pthread_cond_signal(&Q->read_ready);
-   pthread_mutex_unlock(&Q->lock);
-}*/

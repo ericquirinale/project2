@@ -145,24 +145,24 @@ void collectionPhase(){
 }
 
 void analysisPhase(wfdrepo_t *repo){
-wfdrepo_t *tmp = repo->next;
-if (tmp==NULL) {
-  perror("Only one file found");
-}
-int size = repoSize(repo);
-jsdlist_t *jsdArray = malloc(sizeof(jsdlist_t));
-double jsd;
-initJSD(jsdArray);
-while (repo->next!=NULL) {
-  while (tmp!=NULL) {
-    jsd = JSD(repo->wfd, tmp->wfd);
-    jsdArray = insertJsd(jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
-    tmp = tmp->next;
+  wfdrepo_t *tmp = repo->next;
+  if (tmp==NULL) {
+    perror("Only one file found");
   }
-  repo = repo->next;
-  tmp = repo->next;
-}
-displayJSD(jsdArray);
+  int size = repoSize(repo);
+  jsdlist_t *jsdArray = malloc(sizeof(jsdlist_t));
+  double jsd;
+  initJSD(jsdArray);
+  while (repo->next!=NULL) {
+    while (tmp!=NULL) {
+      jsd = JSD(repo->wfd, tmp->wfd);
+      jsdArray = insertJsd(jsdArray, repo->fName, tmp->fName, repo->numTokens, tmp->numTokens, jsd);
+      tmp = tmp->next;
+    }
+    repo = repo->next;
+    tmp = repo->next;
+  }
+  displayJSD(jsdArray);
 }
 
 
@@ -244,7 +244,7 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
     return head;
   }
 
- double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
+double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){ //computes 
   linkedlist_t *head = malloc(sizeof(linkedlist_t));
   initLinked(head); //mean frequency linkedlist
 
@@ -274,8 +274,6 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
     head = insertAlphabetically(head, tmp2->word);
   }
 
-  printf("%s\n", "MEANF: ");
-
    updateFrequency(head);
 
    tmp1 = wfd1;
@@ -297,13 +295,12 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
      }
    }
 
-
    head = headTmp;
 
    while(tmp2->word != NULL){
      if(strcmp(head->word, tmp2->word) == 0){
        kld2 += (tmp2->frequency * logBase2(tmp2->frequency/head->frequency));
-       if (tmp1->next==NULL) {
+       if (tmp2->next==NULL) {
          break;
        }
        tmp2 = tmp2->next;
