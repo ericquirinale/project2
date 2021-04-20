@@ -251,6 +251,11 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
  linkedlist_t *tmp1 = wfd1;
  linkedlist_t *tmp2 = wfd2;
 
+ printf("%s\n", "first file: ");
+  displayLinked(wfd1);
+
+  printf("%s\n", "second file: ");
+   displayLinked(wfd2);
   double jsd;
   double kld1;
   double kld2;
