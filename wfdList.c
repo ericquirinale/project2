@@ -62,7 +62,6 @@ linkedlist_t *insertAlphabetically(linkedlist_t *ll, char *word) {
             current = current->next;
             isHead=0;
         }
-
     }
     else{
       char *tmpData = malloc(strlen(word)+1);
