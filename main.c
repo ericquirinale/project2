@@ -256,9 +256,10 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
   double kld2;
 
   while(tmp1->next!=NULL){ //create meanF
-    head = insertAlphabetically(head, wfd1->word);
+    head = insertAlphabetically(head, tmp1->word);
     tmp1 = tmp1->next;
   }
+  printf("%s\n", "print1: ");
   displayLinked(head);
   tmp1 = wfd1; //reset temp
   while(tmp2->next!=NULL){ //create meanF
@@ -276,6 +277,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
     }
   }
 
+  printf("%s\n", "print2: ");
    displayLinked(head);
    updateFrequency(head);
 
