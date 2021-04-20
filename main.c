@@ -204,22 +204,15 @@ void *directoryQueue(){
 
 void *fileQueue(){
     char *fileName;
-    linkedlist_t wfrequency;
-    initLinked(&wfrequency);
-    linkedlist_t *wptr = &wfrequency;
+    linkedlist_t *wptr = malloc(sizeof(linkedlist_t));
+    initLinked(wptr);
     while(fileQ.count>0){ //while files to dequeue
       fileName = dequeue(&fileQ);
       //printf("%s\n", fileName);
       FILE *fp = fopen(fileName, "r");
       wptr = WFD(fp);
-      printf("%s\n", "WPTR: ");
-      displayLinked(wptr);
-      printf("%s\n", "CHANGED?");
-      displayWFD(&wfdRepo);
       insertRepo(&wfdRepo, fileName, wptr);
     }
-    printf("%s\n", "displayWFD: ");
-    displayWFD(&wfdRepo);
     return 0;
 }
 
@@ -229,9 +222,8 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
   char word[1000];
   char *wordPtr = word;
   int tmpCount = 0;
-  linkedlist_t wfd;
-  linkedlist_t *head = &wfd;
-  initLinked(&wfd);
+  linkedlist_t *head = malloc(sizeof(linkedlist_t));
+  initLinked(head);
 
   while(fscanf(f, "%s", buf) == 1){ //checking each individual word
       for (size_t i = 0; i < strlen(buf); i++) {
@@ -247,52 +239,42 @@ linkedlist_t *WFD(FILE* f){// returns a Linked List for the WFD
       memset(word, 0, sizeof(word));
     }
     updateFrequency(head);
-    printf("%s\n", "HEAD: ");
-    displayLinked(head);
     return head;
   }
 
-double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
- linkedlist_t meanF;
- linkedlist_t *head = &meanF;
- initLinked(&meanF); //mean frequency linkedlist
+ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
+ linkedlist_t *head = malloc(sizeof(linkedlist_t));
+ initLinked(head); //mean frequency linkedlist
 
  linkedlist_t *tmp1 = wfd1;
  linkedlist_t *tmp2 = wfd2;
 
- printf("%s\n", "first file: ");
+  printf("%s\n", "first file: ");
   displayLinked(wfd1);
 
   printf("%s\n", "second file: ");
-   displayLinked(wfd2);
+  displayLinked(wfd2);
   double jsd;
   double kld1;
   double kld2;
 
-  while(tmp1->next!=NULL){ //create meanF
+  while(tmp1->next!=NULL){ //create head
     head = insertAlphabetically(head, tmp1->word);
     tmp1 = tmp1->next;
   }
-  printf("%s\n", "print1: ");
+  head = insertAlphabetically(head, tmp1->word);
+  printf("%s\n", "head1: ");
   displayLinked(head);
   tmp1 = wfd1; //reset temp
-  while(tmp2->next!=NULL){ //create meanF
-    if(strcmp(tmp1->word, tmp2->word)==0){ //if the words are equal add occurences
-      meanF.occurences = tmp1->occurences + tmp2->occurences;
-      tmp1 = tmp1->next;
-      tmp2 = tmp2->next;
-    }
-    else if(strcmp(tmp1->word, tmp2->word)>0){
-      head = insertAlphabetically(head, tmp2->word);
-      tmp2 = tmp2->next;
-    }
-    else{
-      tmp2 = tmp2->next;
-    }
+  while(tmp2->next!=NULL){ //create head
+    head = insertAlphabetically(head, tmp2->word);
+    tmp2 = tmp2->next;
   }
+  head = insertAlphabetically(head, tmp2->word);
 
-  printf("%s\n", "print2: ");
+   printf("%s\n", "head2: ");
    displayLinked(head);
+
    updateFrequency(head);
 
    tmp1 = wfd1;
@@ -306,7 +288,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
          tmp1 = tmp1->next;
          head = head->next;
        }
-       else if (strcmp(meanF.word, tmp1->word)>0) {
+       else if (strcmp(head->word, tmp1->word)>0) {
          tmp1 = tmp1->next;
        }
        else{
@@ -324,7 +306,7 @@ double JSD(linkedlist_t *wfd1, linkedlist_t *wfd2){
          tmp2 = tmp2->next;
          head = head->next;
        }
-       else if (strcmp(meanF.word, tmp2->word)>0) {
+       else if (strcmp(head->word, tmp2->word)>0) {
          tmp2 = tmp2->next;
        }
        else{
